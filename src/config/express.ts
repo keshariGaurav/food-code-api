@@ -10,8 +10,6 @@ import mongoSanitize from 'express-mongo-sanitize';
 import bodyParser from 'body-parser';
 import { logger } from '../utils/logger/logger';
 
-
-
 const configureExpressApp = (
     app: Express,
     enableRateLimit?: boolean,
@@ -22,7 +20,6 @@ const configureExpressApp = (
 
     app.set('port', process.env.PORT || 3000);
 
-
     app.use(cookieParser());
     app.use(morgan('combined'));
     app.use(helmet());
@@ -31,7 +28,6 @@ const configureExpressApp = (
     app.use(cors());
     app.use(mongoSanitize());
     app.use(passport.initialize());
-    
 
     if (enableRateLimit) {
         limiter = rateLimit({

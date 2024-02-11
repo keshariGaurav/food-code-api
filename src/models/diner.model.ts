@@ -9,11 +9,9 @@ export interface IDiner extends Document {
     email: string;
     contactNumber?: number;
     otp?: string;
-    otpExpirationTime?:number;
+    otpExpirationTime?: number;
     createdAt?: Date;
 }
-
-
 
 const dinerSchema = new Schema<IDiner>({
     name: {
@@ -32,9 +30,9 @@ const dinerSchema = new Schema<IDiner>({
     },
     otp: {
         type: String,
-        select:false,
+        select: false,
     },
-    otpExpirationTime:Number,
+    otpExpirationTime: Number,
     createdAt: {
         type: Date,
         default: new Date(),

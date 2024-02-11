@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import crypto from 'crypto';
-import Cafe,{ICafe} from '../../models/cafe.model';
+import Cafe, { ICafe } from '../../models/cafe.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import sendEmail from '../..//utils/email/email';
 import AppError from '../..//utils/common/error/AppError';
@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from 'express';
 
 const signToken = (id: string, expiresIn?: string): string => {
     return jwt.sign({ id }, process.env.JWT_SECRET!, {
-        expiresIn: expiresIn?expiresIn:process.env.JWT_EXPIRES_IN,
+        expiresIn: expiresIn ? expiresIn : process.env.JWT_EXPIRES_IN,
     });
 };
 
@@ -17,7 +17,7 @@ const createSendToken = (cafe: ICafe, statusCode: number, res: Response) => {
     const cookieOptions = {
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 90 days
         httpOnly: true,
-        secure:false,
+        secure: false,
     };
 
     if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
@@ -64,16 +64,16 @@ const createSendPasswordResetToken = async (
 };
 
 export const signup = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {  
+    async (req: Request, res: Response, next: NextFunction) => {
         const newUser = await Cafe.create({
-            name: req.body.name,  //! TODO: CHECK FOR UNIQUE USER NAME SIGN UP FAILING THE TEST CASE AS OF NOW
+            name: req.body.name, //! TODO: CHECK FOR UNIQUE USER NAME SIGN UP FAILING THE TEST CASE AS OF NOW
             email: req.body.email,
             password: req.body.password,
             passwordConfirm: req.body.passwordConfirm,
         });
         //! MIGHT BE A THOUGHT TO CONVERT VERIFY EMAIL BY HASHED TOKEN INSTEAD OF JWT TOKEN BECAUSE OF SECURITY CONCERNS
         //! COULD BE THOUGHT WHILE IMPLEMENTING TWO FACTOR AUTH
-        const verificationToken = signToken(newUser._id,'1d');
+        const verificationToken = signToken(newUser._id, '1d');
         const url = `${req.protocol}://${req.get(
             'host'
         )}/api/v1/cafe/verifyEmail/${verificationToken}`;
@@ -211,7 +211,6 @@ export const protect = catchAsync(
         } catch (error) {
             return next(new AppError('Invalid token', 401));
         }
-        
     }
 );
 
@@ -279,7 +278,8 @@ export const forgotPassword = catchAsync(
             await user.save({ validateBeforeSave: false });
             return next(
                 new AppError(
-                    'There was an error sending the email. Please try again later.',500
+                    'There was an error sending the email. Please try again later.',
+                    500
                 )
             );
         }
@@ -303,7 +303,7 @@ export const resetPassword = catchAsync(
         }
         cafe.password = req.body.password;
         cafe.passwordConfirm = req.body.passwordConfirm;
-        cafe.emailVerification=true;
+        cafe.emailVerification = true;
         cafe.passwordResetToken = undefined;
         cafe.passwordResetExpires = undefined;
         await cafe.save();
@@ -313,16 +313,16 @@ export const resetPassword = catchAsync(
 
 export const updatePassword = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const user = await Cafe.findOne({ _id: (req.user as ICafe)._id }).select(
-            '+password'
-        );
+        const user = await Cafe.findOne({
+            _id: (req.user as ICafe)._id,
+        }).select('+password');
 
         if (
             !(await user.correctPassword(req.body.oldPassword, user.password))
         ) {
             return next(
                 new AppError(
-                    'You\'ve entered the wrong password. If you forgot your password, please reset it.',
+                    "You've entered the wrong password. If you forgot your password, please reset it.",
                     401
                 )
             );
@@ -339,13 +339,9 @@ export const verifyEmail = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const token = req.params.token;
 
-        if(!token)
-        {
+        if (!token) {
             return next(
-                new AppError(
-                    'No token found for email verification.',
-                    404
-                )
+                new AppError('No token found for email verification.', 404)
             );
         }
 
@@ -360,7 +356,6 @@ export const verifyEmail = catchAsync(
                 });
             }
         );
-
 
         const currentUser = await Cafe.findById(decoded.id);
         if (!currentUser) {

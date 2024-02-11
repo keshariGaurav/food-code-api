@@ -4,14 +4,13 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { Request, Response, NextFunction } from 'express';
 
-
 export interface ICafe extends Document {
     name: string;
     email: string;
     emailVerification: boolean;
     role: string;
     createdAt: Date;
-    location:string;
+    location: string;
     passwordChangedAt?: Date;
     passwordResetToken?: string;
     passwordResetExpires?: Date;
@@ -47,8 +46,8 @@ const cafeSchema: Schema<ICafe> = new Schema<ICafe>({
         enum: ['admin', 'user'],
         default: 'user',
     },
-    location:{
-        type:String,
+    location: {
+        type: String,
     },
     createdAt: {
         type: Date,
@@ -77,9 +76,7 @@ const cafeSchema: Schema<ICafe> = new Schema<ICafe>({
     },
 });
 
-
-
-cafeSchema.pre<ICafe>('save', function (next:NextFunction) {
+cafeSchema.pre<ICafe>('save', function (next: NextFunction) {
     if (!this.isModified('password') || this.isNew) {
         return next();
     }
@@ -87,7 +84,7 @@ cafeSchema.pre<ICafe>('save', function (next:NextFunction) {
     next();
 });
 
-cafeSchema.pre<ICafe>('save', async function (next:NextFunction) {
+cafeSchema.pre<ICafe>('save', async function (next: NextFunction) {
     if (!this.isModified('password')) {
         return next();
     }

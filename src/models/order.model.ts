@@ -5,7 +5,7 @@ interface IOrder extends Document {
     menuItems: {
         menuItemId: Schema.Types.ObjectId;
         quantity: number;
-        price:number;
+        price: number;
     }[];
     status: string;
     orderDate: Date;
