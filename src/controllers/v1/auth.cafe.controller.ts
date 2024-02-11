@@ -322,7 +322,7 @@ export const updatePassword = catchAsync(
         ) {
             return next(
                 new AppError(
-                    "You've entered the wrong password. If you forgot your password, please reset it.",
+                    'You\'ve entered the wrong password. If you forgot your password, please reset it.',
                     401
                 )
             );
