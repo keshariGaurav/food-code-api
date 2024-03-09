@@ -55,7 +55,6 @@ const MenuItemSchema = new Schema<IMenuItem>({
     },
     description: {
         type: String,
-        required: true,
     },
     price: {
         type: Number,

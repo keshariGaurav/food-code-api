@@ -16,8 +16,8 @@ const windowMs = 15 * 60 * 1000; //15 minutes
 
 logger.info('Starting application...');
 
-if (!dotenvExists('.env.example')) {
-    logger.error('Application will be terminated');
+if (!dotenvExists('.env')) {
+    logger.error('Application will be terminated...');
     process.exit(1);
 }
 
