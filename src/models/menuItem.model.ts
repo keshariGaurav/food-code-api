@@ -3,7 +3,6 @@ import Category from './category.model';
 
 export interface IAddOnItem extends Document {
     name:string;
-    category:string;
     required:boolean;
     multiSelect:boolean;
     limit:boolean;
@@ -17,7 +16,6 @@ export interface IAddOnItem extends Document {
 }
 const AddOnItemSchema = new Schema<IAddOnItem>({
     name: { type: String, required: true },
-    category: { type: String, required: true },
     required: { type: Boolean, required: true },
     multiSelect: { type: Boolean, required: true },
     limit: { type: Boolean, required: true },
