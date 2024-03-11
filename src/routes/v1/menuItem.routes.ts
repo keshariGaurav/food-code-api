@@ -9,12 +9,11 @@ router.get('/:id', v1MenuItemControllers.getOne);
 router.post('/', v1MenuItemControllers.create);
 router.patch(
     '/:id',
-    v1AuthCafeControllers.protect,
     v1MenuItemControllers.update
 );
+router.put('/:id',v1MenuItemControllers.deleteAndCreate);
 router.delete(
     '/:id',
-    v1AuthCafeControllers.protect,
     v1MenuItemControllers.remove
 );
 export { router };
