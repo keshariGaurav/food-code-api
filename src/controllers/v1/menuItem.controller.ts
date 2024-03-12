@@ -11,7 +11,7 @@ export const getAll = catchAsync(
         res.status(201).json({
             status: 'success',
             data: {
-                menuItems,
+                menuItems:menuItems,
             },
         });
     }
@@ -24,7 +24,7 @@ export const getOne = catchAsync(
         res.status(201).json({
             status: 'success',
             data: {
-                menuItems,
+                menuItem:menuItems,
             },
         });
     }
@@ -37,7 +37,7 @@ export const create = catchAsync(
         res.status(201).json({
             status: 'success',
             data: {
-                newItem,
+                menuItem:newItem,
             },
         });
     }
@@ -56,7 +56,23 @@ export const update = catchAsync(
         res.status(200).json({
             status: 'success',
             data: {
-                category: updatedMenuItem,
+                menuItem: updatedMenuItem,
+            },
+        });
+    }
+);
+
+export const deleteAndCreate = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const newItem = await MenuItem.create(req.body);
+        if (newItem) {
+            await MenuItem.findByIdAndDelete(req.params.id);
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                menuItem: newItem,
             },
         });
     }
