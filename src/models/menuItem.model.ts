@@ -40,7 +40,7 @@ export interface IMenuItem extends Document {
     name: string;
     description: string;
     price: number;
-    image: string;
+    image: Buffer;
     available: boolean;
     categoryId: Schema.Types.ObjectId;
     addOnItems: IAddOnItem[];
@@ -59,7 +59,7 @@ const MenuItemSchema = new Schema<IMenuItem>({
         required: true,
     },
     image: {
-        type: String,
+        type: Buffer,
         required: true,
     },
     available: {
