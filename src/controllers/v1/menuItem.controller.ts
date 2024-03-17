@@ -30,9 +30,14 @@ export const getOne = catchAsync(
     }
 );
 
+
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const menuItemDetails = req.body;
+        const menuItemDetails = {
+            ...req.body,
+            image: req.file.buffer,
+            addOnItems: JSON.parse(req.body.addOnItems)
+        };
         const newItem = await MenuItem.create(menuItemDetails);
         res.status(201).json({
             status: 'success',
@@ -42,6 +47,7 @@ export const create = catchAsync(
         });
     }
 );
+
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
