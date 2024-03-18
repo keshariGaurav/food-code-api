@@ -3,7 +3,7 @@ import { v1MenuItemControllers } from '../../controllers/index';
 import { v1AuthCafeControllers } from '../../controllers/index';
 
 const router = express.Router();
-
+router.get('/category', v1MenuItemControllers.getAllByCategory);
 router.get('/', v1MenuItemControllers.getAll);
 router.get('/:id', v1MenuItemControllers.getOne);
 router.post('/', v1MenuItemControllers.create);

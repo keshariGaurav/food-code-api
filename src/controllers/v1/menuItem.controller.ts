@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import MenuItem from '../../models/menuItem.model';
+import {IMenuItem} from '../../models/menuItem.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import sendEmail from '../..//utils/email/email';
 import AppError from '../..//utils/common/error/AppError';
@@ -90,3 +91,39 @@ export const remove = catchAsync(
         });
     }
 );
+
+export const getAllByCategory = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const groupedData = await MenuItem.aggregate<IMenuItem>([
+            {
+                $group: {
+                    _id: {
+                        categoryId: '$categoryId',
+                    } as any,
+                    menus: {
+                        $push: '$$ROOT',
+                    },
+                },
+            },
+            {
+                $lookup: {
+                    from: 'categories',
+                    localField: '_id.categoryId',
+                    foreignField: '_id',
+                    as: 'category',
+                },
+            },
+            {
+                $unwind: '$category',
+            },
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                result:groupedData
+            }
+        });
+    }
+);
+ 

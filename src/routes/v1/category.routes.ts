@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', v1CategoryControllers.getAll);
 router.get('/:id', v1CategoryControllers.getOne);
-router.post('/', v1AuthCafeControllers.protect, v1CategoryControllers.create);
+router.post('/',  v1CategoryControllers.create);
 router.patch(
     '/:id',
     v1AuthCafeControllers.protect,
