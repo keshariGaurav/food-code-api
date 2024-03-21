@@ -34,6 +34,10 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        if(!req?.file?.buffer)
+        {
+            return next(new AppError('Please Upload Image!', 404));
+        }
         const menuItemDetails = {
             ...req.body,
             image: req.file.buffer,
