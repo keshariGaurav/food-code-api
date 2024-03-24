@@ -7,6 +7,8 @@ const upload = multer();
 
 const router = express.Router();
 router.get('/category', v1MenuItemControllers.getAllByCategory);
+router.post('/available/:id', v1MenuItemControllers.updateAval);
+
 router.get('/', v1MenuItemControllers.getAll);
 router.get('/:id', v1MenuItemControllers.getOne);
 router.post('/', upload.single('image') , v1MenuItemControllers.create);
