@@ -101,6 +101,21 @@ export const remove = catchAsync(
         });
     }
 );
+export const updateAval = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const available = req.body.available;
+        const menuItem = await MenuItem.findByIdAndUpdate(req.params.id,{
+            available
+        });
+        if (!menuItem) {
+            return next(new AppError('MenuItem not found', 404));
+        }
+        res.status(204).json({
+            status: 'success',
+            data: menuItem,
+        });
+    }
+);
 
 export const getAllByCategory = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -130,9 +145,7 @@ export const getAllByCategory = catchAsync(
 
         res.status(200).json({
             status: 'success',
-            data: {
-                result:groupedData
-            }
+            data: groupedData
         });
     }
 );
