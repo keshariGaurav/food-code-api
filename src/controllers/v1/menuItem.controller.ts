@@ -56,7 +56,7 @@ export const create = catchAsync(
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        let updateData = {
+         const updateData = {
             ...req.body,
             ...(req.body.addOnItems && { addOnItems: JSON.parse(req.body.addOnItems) }),
         };
