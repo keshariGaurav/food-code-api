@@ -56,9 +56,17 @@ export const create = catchAsync(
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        let updateData = {
+            ...req.body,
+            ...(req.body.addOnItems && { addOnItems: JSON.parse(req.body.addOnItems) }),
+        };
+
+        if (req.file?.buffer) {
+            updateData.image = req.file.buffer;
+        }
         const updatedMenuItem = await MenuItem.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updateData,
             { new: true, runValidators: true }
         );
         if (!updatedMenuItem) {
