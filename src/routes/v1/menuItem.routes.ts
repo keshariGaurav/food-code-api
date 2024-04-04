@@ -14,6 +14,7 @@ router.get('/:id', v1MenuItemControllers.getOne);
 router.post('/', upload.single('image') , v1MenuItemControllers.create);
 router.patch(
     '/:id',
+    upload.none(),
     v1MenuItemControllers.update
 );
 router.put('/:id',v1MenuItemControllers.deleteAndCreate);
