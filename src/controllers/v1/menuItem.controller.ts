@@ -8,7 +8,7 @@ import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const menuItems = await MenuItem.find({});
+        const menuItems = await MenuItem.find({}, '-image');
         res.status(201).json({
             status: 'success',
             data: {
