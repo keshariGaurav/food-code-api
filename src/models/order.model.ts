@@ -43,6 +43,10 @@ const OrderItemSchema = new Schema<IOrderItem>({
             },
             selectedItems: [
                 {
+                    itemId: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'MenuItem.addOnItems.items._id',
+                    },
                     name: { type: String, required: true },
                     price: { type: Number, required: true },
                 },
