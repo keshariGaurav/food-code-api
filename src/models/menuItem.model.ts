@@ -7,6 +7,7 @@ export interface IAddOnItem extends Document {
     multiSelect:boolean;
     limit:boolean;
     limitSize?:number;
+ 
     items: [
         {
             name:string;
@@ -40,7 +41,8 @@ export interface IMenuItem extends Document {
     name: string;
     description: string;
     price: number;
-    image: Buffer;
+    image: string;
+    tag: string;
     available: boolean;
     categoryId: Schema.Types.ObjectId;
     addOnItems: IAddOnItem[];
@@ -50,6 +52,7 @@ const MenuItemSchema = new Schema<IMenuItem>({
     name: {
         type: String,
         required: true,
+        unique:true,
     },
     description: {
         type: String,
@@ -58,8 +61,12 @@ const MenuItemSchema = new Schema<IMenuItem>({
         type: Number,
         required: true,
     },
+    tag:{
+        type:String,
+        enum:[null,'best_seller','must_try','our_special']
+    },
     image: {
-        type: Buffer,
+        type: String,
         required: true,
     },
     available: {

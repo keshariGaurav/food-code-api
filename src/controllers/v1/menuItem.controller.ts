@@ -34,16 +34,8 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        if(!req?.file?.buffer)
-        {
-            return next(new AppError('Please Upload Image!', 404));
-        }
-        const menuItemDetails = {
-            ...req.body,
-            image: req.file.buffer,
-            addOnItems: JSON.parse(req.body.addOnItems)
-        };
-        const newItem = await MenuItem.create(menuItemDetails);
+     
+        const newItem = await MenuItem.create(req.body);
         res.status(201).json({
             status: 'success',
             data: {
@@ -56,17 +48,10 @@ export const create = catchAsync(
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const updateData = {
-            ...req.body,
-            ...(req.body.addOnItems && { addOnItems: JSON.parse(req.body.addOnItems) }),
-        };
 
-        if (req.file?.buffer) {
-            updateData.image = req.file.buffer;
-        }
         const updatedMenuItem = await MenuItem.findByIdAndUpdate(
             req.params.id,
-            updateData,
+            req.body,
             { new: true, runValidators: true }
         );
         if (!updatedMenuItem) {

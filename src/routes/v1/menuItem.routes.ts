@@ -11,10 +11,9 @@ router.post('/available/:id', v1MenuItemControllers.updateAval);
 
 router.get('/', v1MenuItemControllers.getAll);
 router.get('/:id', v1MenuItemControllers.getOne);
-router.post('/', upload.single('image') , v1MenuItemControllers.create);
+router.post('/',v1MenuItemControllers.create);
 router.patch(
     '/:id',
-    upload.none(),
     v1MenuItemControllers.update
 );
 router.put('/:id',v1MenuItemControllers.deleteAndCreate);
