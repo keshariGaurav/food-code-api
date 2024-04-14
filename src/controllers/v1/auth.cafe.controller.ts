@@ -15,12 +15,13 @@ const signToken = (id: string, expiresIn?: string): string => {
 const createSendToken = (cafe: ICafe, statusCode: number, res: Response) => {
     const token = signToken(cafe._id);
     const cookieOptions = {
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 90 days
         httpOnly: true,
         secure: false,
+        path: '/',
+        maxAge: 999999999,
     };
 
-    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
     res.cookie('jwt', token, cookieOptions);
     cafe.password = undefined;
@@ -214,6 +215,16 @@ export const protect = catchAsync(
     }
 );
 
+export const verifyLoggedIn = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        res.status(201).json({
+            status: 'Success',
+            message:
+                'You are logged In.',
+        });
+    });
+
 export const restrictTo = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
         if (!roles.includes((req.user as ICafe).role)) {
@@ -256,11 +267,8 @@ export const forgotPassword = catchAsync(
 
         const resetToken = user.createPasswordResetToken();
         await user.save({ validateBeforeSave: false });
-        const resetURL = `${req.protocol}://${req.get(
-            'host'
-        )}/api/v1/cafe/resetPassword/${resetToken}`;
 
-        const message = `Forgot your password? Submit a password request with password and passwordConfirm to :${resetURL}.\n If you didn't forget your password please ignore this email.`;
+        const message = `Forgot your password? Your Password Reset OTP is ${resetToken}.\n If you didn't forget your password please ignore this email.`;
 
         try {
             await sendEmail({
@@ -290,16 +298,17 @@ export const resetPassword = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const hashedToken = crypto
             .createHash('sha256')
-            .update(req.params.token)
+            .update(req.body.otp)
             .digest('hex');
 
         const cafe = await Cafe.findOne({
+            email:req.body.email,
             passwordResetToken: hashedToken,
             passwordResetExpires: { $gt: new Date() },
         });
 
         if (!cafe) {
-            return next(new AppError('Token is invalid or has expired', 400));
+            return next(new AppError('OTP is invalid or has expired', 400));
         }
         cafe.password = req.body.password;
         cafe.passwordConfirm = req.body.passwordConfirm;
