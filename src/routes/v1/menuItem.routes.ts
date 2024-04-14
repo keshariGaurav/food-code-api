@@ -6,19 +6,26 @@ import multer from 'multer';
 const upload = multer();
 
 const router = express.Router();
-router.get('/category', v1MenuItemControllers.getAllByCategory);
+router.get(
+    '/category',
+    v1AuthCafeControllers.protect,
+    v1MenuItemControllers.getAllByCategory
+);
 router.post('/available/:id', v1MenuItemControllers.updateAval);
 
 router.get('/', v1MenuItemControllers.getAll);
 router.get('/:id', v1MenuItemControllers.getOne);
-router.post('/',v1MenuItemControllers.create);
+router.post('/', v1AuthCafeControllers.protect,v1MenuItemControllers.create);
 router.patch(
-    '/:id',
+    '/:id',v1AuthCafeControllers.protect,
     v1MenuItemControllers.update
 );
-router.put('/:id',v1MenuItemControllers.deleteAndCreate);
-router.delete(
+router.put(
     '/:id',
+    v1AuthCafeControllers.protect,v1MenuItemControllers.deleteAndCreate
+);
+router.delete(
+    '/:id',v1AuthCafeControllers.protect,
     v1MenuItemControllers.remove
 );
 export { router };
