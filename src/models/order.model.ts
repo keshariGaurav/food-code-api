@@ -21,6 +21,7 @@ interface IOrder extends Document {
     orderDate: Date;
     tableNumber:number;
     totalAmount:number;
+    orderNumber:number;
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -31,6 +32,7 @@ const OrderItemSchema = new Schema<IOrderItem>({
     },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
+    
 
     //~ TOTAL AMOUNT = (quantity)*(price + selectedItems total price)
 
@@ -53,6 +55,7 @@ const OrderItemSchema = new Schema<IOrderItem>({
             ],
         },
     ],
+    
 });
 
 const OrderSchema = new Schema<IOrder>({
@@ -74,6 +77,15 @@ const OrderSchema = new Schema<IOrder>({
         type: Date,
         default: new Date(),
     },
+    orderNumber: { type: Number },  
+});
+
+OrderSchema.pre<IOrder>('save', async function (next) {
+    if (this.isNew) {
+        const lastOrder = await Order.findOne().sort({ orderNumber: -1 }); 
+        this.orderNumber = lastOrder && lastOrder.orderNumber ? lastOrder.orderNumber + 1 : 1; 
+    }
+    next(); 
 });
 
 const Order = model<IOrder>('Order', OrderSchema);

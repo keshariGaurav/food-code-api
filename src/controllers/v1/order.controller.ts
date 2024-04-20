@@ -4,10 +4,19 @@ import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await Order.find({});
+        const queryObj =
+            req.query.status === 'complete'
+                ? { status: 'complete' }
+                : { status: { $in: ['pending', 'send_to_kitchen'] } };
+        const result = await Order.find(queryObj)
+            .populate({
+                path: 'menuItems.menuItemId',
+                model: 'MenuItem',
+            })
+            .populate('dinerId');
         res.status(201).json({
             status: 'success',
-            data: result
+            data: result,
         });
     }
 );
@@ -18,40 +27,48 @@ export const getOne = catchAsync(
         const result = await Order.findById(id);
         res.status(201).json({
             status: 'success',
-            data: result
+            data: result,
         });
     }
 );
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-      
         const result = await Order.create(req.body);
         res.status(201).json({
             status: 'success',
-            data: result
+            data: result,
         });
     }
 );
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await Order.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true, runValidators: true }
-        );
-        if (!result) {
+        const orderId = req.params.id;
+        console.log(orderId);
+        const { status } = req.body;
+        console.log(status);
+        const order = await Order.findById(orderId);
+
+        if (!order) {
             return next(new AppError('Item not found', 404));
+        }
+        const currentStatus = order.status;
+        if (
+            (currentStatus === 'pending' && status === 'send_to_kitchen') ||
+            (currentStatus === 'send_to_kitchen' && status === 'complete')
+        ) {
+            order.status = status;
+            await order.save();
+        } else {
+            return next(new AppError('Invalid status update', 404));
         }
         res.status(200).json({
             status: 'success',
-            data: result
+            data: order,
         });
     }
 );
-
-
 
 export const remove = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -65,4 +82,3 @@ export const remove = catchAsync(
         });
     }
 );
-
