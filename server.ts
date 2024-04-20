@@ -5,9 +5,9 @@ process.on('uncaughtException', (err: Error) => {
 });
 
 import { logger } from './src/utils/logger/logger';
-import { app } from './src/app';
+import { app , server} from './src/app';
 
-app.listen(app.get('port'), () => {
+server.listen(app.get('port'), () => {
     logger.info(
         'App is running at http://localhost:' +
             app.get('port') +
