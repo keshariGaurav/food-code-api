@@ -11,17 +11,17 @@ import { connectToDb } from './utils/db/database';
 import globalErrorHandler from './controllers/v1/error.controller';
 import AppError from './utils/common/error/AppError';
 import { Server as SocketIOServer } from 'socket.io';
-import http from 'http'; 
+import http from 'http';
 import Order from './models/order.model';
 const app = express();
-const server = http.createServer(app); 
-const io = new SocketIOServer(server , {
+const server = http.createServer(app);
+const io = new SocketIOServer(server, {
     cors: {
-      origin: "http://localhost:5173", 
-      methods: ["GET", "POST"], 
-    }});
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST'],
+    },
+});
 const windowMs = 15 * 60 * 1000; //15 minutes
-
 
 logger.info('Starting application...');
 
@@ -51,29 +51,27 @@ io.on('connection', async (socket) => {
         console.log('user disconnected');
     });
 });
-let OrderStream = Order.watch([{ $match: {operationType: {$in: ['insert']}}}])
+const OrderStream = Order.watch([
+    { $match: { operationType: { $in: ['insert'] } } },
+]);
 
 OrderStream.on('change', async (change) => {
     console.log('Change detected:', change);
-  if (change.operationType === 'insert') {
-    const order = change.fullDocument;
-    const orderId = change.fullDocument._id; 
-            const populatedOrder = await Order.findById(orderId)
-                .populate({
-                    path: 'menuItems.menuItemId',
-                    model: 'MenuItem'
-                })
-                .populate('dinerId');
+    if (change.operationType === 'insert') {
+        const orderId = change.fullDocument._id;
+        const populatedOrder = await Order.findById(orderId)
+            .populate({
+                path: 'menuItems.menuItemId',
+                model: 'MenuItem',
+            })
+            .populate('dinerId');
 
-            if (populatedOrder) {
-                io.emit('orderCreated', populatedOrder); 
-                console.log("emitted");
-            }
-             
-  }
-
+        if (populatedOrder) {
+            io.emit('orderCreated', populatedOrder);
+            console.log('emitted');
+        }
+    }
 });
-
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
     const error = new AppError(
@@ -86,9 +84,6 @@ app.all('*', (req: Request, res: Response, next: NextFunction) => {
 //Error handling
 app.use(globalErrorHandler);
 
-
-
-
 //TODO: Add swagger
 
-export { app, server};
+export { app, server };
