@@ -2,6 +2,7 @@ import CafeProfile from '../../models/cafeProfile.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import AppError from '../../utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+import { generateQR } from '../../utils/qr/qr';
 
 
 
@@ -64,6 +65,30 @@ export const update = catchAsync(
             data: {
                 cafe
             },
+        });
+    }
+);
+
+export const getQr = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const url = 'http://localhost:3100/';
+        const table = req.body.table;
+        let response = [];
+        for (let i of table){
+            console.log(i);
+            console.log(`${url}tableNo=${i}`)
+            const qrCodeImage = await generateQR(`${url}?tableNo=${i}`);
+            console.log(qrCodeImage);
+            response.push({
+                tableNo: i,
+                qrCodeImage : qrCodeImage
+            })
+        }
+        res.status(201).json({
+            status: 'success',
+            data : {
+                response
+            }
         });
     }
 );
