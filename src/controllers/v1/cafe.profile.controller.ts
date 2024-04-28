@@ -73,16 +73,16 @@ export const getQr = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const url = 'http://localhost:3100/';
         const table = req.body.table;
-        let response = [];
-        for (let i of table){
+        const response = [];
+        for (const i of table){
             console.log(i);
-            console.log(`${url}tableNo=${i}`)
+            console.log(`${url}tableNo=${i}`);
             const qrCodeImage = await generateQR(`${url}?tableNo=${i}`);
             console.log(qrCodeImage);
             response.push({
                 tableNo: i,
                 qrCodeImage : qrCodeImage
-            })
+            });
         }
         res.status(201).json({
             status: 'success',

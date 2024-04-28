@@ -7,5 +7,5 @@ router.get('/', v1CafeProfileControllers.getAll);
 router.get('/:id', v1CafeProfileControllers.getOne);
 router.post('/', v1CafeProfileControllers.create);
 router.patch('/:id', v1CafeProfileControllers.update);
-router.post('/get-qr', v1CafeProfileControllers.getQr)
+router.post('/get-qr', v1CafeProfileControllers.getQr);
 export { router };
