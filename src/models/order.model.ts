@@ -7,6 +7,7 @@ interface IOrderItem {
     totalAmount:number;
     addOnItems: {
         addOnItemId: Schema.Types.ObjectId;
+        addOnItemName:string;
         selectedItems: {
             name: string;
             price: number;
@@ -42,6 +43,9 @@ const OrderItemSchema = new Schema<IOrderItem>({
             addOnItemId: {
                 type: Schema.Types.ObjectId,
                 ref: 'MenuItem.addOnItems._id',
+            },
+            addOnItemName:{
+                type:String,required:true
             },
             selectedItems: [
                 {
