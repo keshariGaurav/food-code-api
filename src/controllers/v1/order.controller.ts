@@ -45,9 +45,7 @@ export const create = catchAsync(
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const orderId = req.params.id;
-        console.log(orderId);
         const { status } = req.body;
-        console.log(status);
         const order = await Order.findById(orderId);
 
         if (!order) {
