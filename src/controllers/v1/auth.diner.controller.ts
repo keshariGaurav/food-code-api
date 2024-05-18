@@ -94,19 +94,19 @@ export const login = catchAsync(
         if (!email || !otp) {
             return next(new AppError('Please provide email and OTP', 400));
         }
-         const hashedToken = crypto
-             .createHash('sha256')
-             .update(otp)
-             .digest('hex');
+        const hashedToken = crypto
+            .createHash('sha256')
+            .update(otp)
+            .digest('hex');
 
-        let diner = await Diner.findOne({ email,otp:hashedToken });
+        const diner = await Diner.findOne({ email,otp:hashedToken });
 
         if (!diner) {
             return next(new AppError('Incorrect OTP!', 400));
         }
-         diner.otp = undefined;
-         diner.otpExpirationTime = undefined;
-         await diner.save();
+        diner.otp = undefined;
+        diner.otpExpirationTime = undefined;
+        await diner.save();
 
         createSendToken(diner, 200, res);
         
@@ -116,7 +116,7 @@ export const login = catchAsync(
 export const authCallback = catchAsync(
     async (req: RequestWithUser, res: Response, next: NextFunction) => {
         const email = req.user.email;
-        let diner = await Diner.findOne({ email });
+        const diner = await Diner.findOne({ email });
         if (!diner) {
             return next(new AppError('No Email found!', 400));
         }

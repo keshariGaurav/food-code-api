@@ -45,7 +45,6 @@ dinerSchema.methods.createOtpToken = function (): string {
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-        console.log(this.otp);
     this.otpExpirationTime = new Date(Date.now() + 10 * 60 * 1000);
     return resetToken;
 };
