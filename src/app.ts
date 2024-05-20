@@ -2,6 +2,7 @@ import express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import { configureExpressApp } from './config/express';
 import passport from 'passport';
+import session from 'express-session';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { configurePassport } from './config/passport';
 import { dotenvExists } from './utils/common/checkDotEnv';
@@ -37,6 +38,17 @@ if (!process.env.MONGODB_URI) {
 
 //MongoDB connection
 connectToDb(process.env.MONGODB_URI);
+
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Express Configuration
 configurePassport();

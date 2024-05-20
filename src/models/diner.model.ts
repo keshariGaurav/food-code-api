@@ -11,6 +11,7 @@ export interface IDiner extends Document {
     otp?: string;
     otpExpirationTime?: number;
     createdAt?: Date;
+    createOtpToken(): string;
 }
 
 const dinerSchema = new Schema<IDiner>({
@@ -30,7 +31,6 @@ const dinerSchema = new Schema<IDiner>({
     },
     otp: {
         type: String,
-        select: false,
     },
     otpExpirationTime: Number,
     createdAt: {
@@ -38,6 +38,16 @@ const dinerSchema = new Schema<IDiner>({
         default: new Date(),
     },
 });
+
+dinerSchema.methods.createOtpToken = function (): string {
+    const resetToken = crypto.randomBytes(3).toString('hex');
+    this.otp = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+    this.otpExpirationTime = new Date(Date.now() + 10 * 60 * 1000);
+    return resetToken;
+};
 
 const diner = mongoose.model<IDiner>('Diner', dinerSchema);
 export default diner;
