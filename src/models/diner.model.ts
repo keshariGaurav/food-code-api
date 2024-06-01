@@ -12,7 +12,7 @@ export interface IDiner extends Document {
     otpExpirationTime?: number;
     createdAt?: Date;
     createOtpToken(): string;
-    role:string;
+    role: string;
 }
 
 const dinerSchema = new Schema<IDiner>({
@@ -21,7 +21,12 @@ const dinerSchema = new Schema<IDiner>({
         required: [true, 'Please provide your name.'],
     },
     email: { type: String, unique: true, sparse: true },
-    role: { type: String, enum: ['guest', 'registered'], required: true, default:'registered' },
+    role: {
+        type: String,
+        enum: ['guest', 'registered'],
+        required: true,
+        default: 'registered',
+    },
 
     contactNumber: {
         type: Number,
@@ -38,10 +43,7 @@ const dinerSchema = new Schema<IDiner>({
 
 dinerSchema.methods.createOtpToken = function (): string {
     const resetToken = crypto.randomBytes(3).toString('hex');
-    this.otp = crypto
-        .createHash('sha256')
-        .update(resetToken)
-        .digest('hex');
+    this.otp = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.otpExpirationTime = new Date(Date.now() + 10 * 60 * 1000);
     return resetToken;
 };

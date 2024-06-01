@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import MenuItem from '../../models/menuItem.model';
-import {IMenuItem} from '../../models/menuItem.model';
+import { IMenuItem } from '../../models/menuItem.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import sendEmail from '../..//utils/email/email';
 import AppError from '../..//utils/common/error/AppError';
@@ -12,7 +12,7 @@ export const getAll = catchAsync(
         res.status(201).json({
             status: 'success',
             data: {
-                menuItems:menuItems,
+                menuItems: menuItems,
             },
         });
     }
@@ -25,30 +25,26 @@ export const getOne = catchAsync(
         res.status(201).json({
             status: 'success',
             data: {
-                menuItem:menuItems,
+                menuItem: menuItems,
             },
         });
     }
 );
 
-
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-     
         const newItem = await MenuItem.create(req.body);
         res.status(201).json({
             status: 'success',
             data: {
-                menuItem:newItem,
+                menuItem: newItem,
             },
         });
     }
 );
 
-
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-
         const updatedMenuItem = await MenuItem.findByIdAndUpdate(
             req.params.id,
             req.body,
@@ -97,8 +93,8 @@ export const remove = catchAsync(
 export const updateAval = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const available = req.body.available;
-        const menuItem = await MenuItem.findByIdAndUpdate(req.params.id,{
-            available
+        const menuItem = await MenuItem.findByIdAndUpdate(req.params.id, {
+            available,
         });
         if (!menuItem) {
             return next(new AppError('MenuItem not found', 404));
@@ -138,8 +134,7 @@ export const getAllByCategory = catchAsync(
 
         res.status(200).json({
             status: 'success',
-            data: groupedData
+            data: groupedData,
         });
     }
 );
- 

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', v1DinerControllers.getAll);
 router.get('/:id', v1DinerControllers.getOne);
-router.post('/',  v1DinerControllers.create);
+router.post('/', v1DinerControllers.create);
 router.post('/guest-login', v1AuthDinerControllers.createGuest);
 
 router.get(
@@ -19,9 +19,6 @@ router.get(
     passport.authenticate('google', { failureRedirect: '/login' }),
     v1AuthDinerControllers.authCallback
 );
-router.post(
-    '/login',
-    v1AuthDinerControllers.sendLoginOtp
-);
+router.post('/login', v1AuthDinerControllers.sendLoginOtp);
 router.post('/verify-login', v1AuthDinerControllers.login);
 export { router };

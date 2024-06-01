@@ -2,40 +2,45 @@ import { Document, Schema, model } from 'mongoose';
 import Category from './category.model';
 
 export interface IAddOnItem extends Document {
-    name:string;
-    required:boolean;
-    multiSelect:boolean;
-    limit:boolean;
-    limitSize?:number;
- 
+    name: string;
+    required: boolean;
+    multiSelect: boolean;
+    limit: boolean;
+    limitSize?: number;
+
     items: [
         {
-            name:string;
-            price:number;
+            name: string;
+            price: number;
         }
-    ]
+    ];
 }
 const AddOnItemSchema = new Schema<IAddOnItem>({
     name: { type: String, required: true },
     required: { type: Boolean, required: true },
     multiSelect: { type: Boolean, required: true },
     limit: { type: Boolean, required: true },
-    limitSize: { 
-        type: Number, 
-        required: function() { return this.limit; }, 
+    limitSize: {
+        type: Number,
+        required: function () {
+            return this.limit;
+        },
         validate: {
-            validator: function(limitSize: number) {
+            validator: function (limitSize: number) {
                 if (!this.limit) return limitSize === null || limitSize === 0;
                 return limitSize > 0;
             },
-            message: props => `Invalid limitSize value: ${props.value}. If limit is false, limitSize should be null or 0. If limit is true, limitSize must be a positive number.`
+            message: (props) =>
+                `Invalid limitSize value: ${props.value}. If limit is false, limitSize should be null or 0. If limit is true, limitSize must be a positive number.`,
         },
-        default: null 
+        default: null,
     },
-    items: [{
-        name: { type: String, required: true },
-        price: { type: Number, required: true },
-    }],
+    items: [
+        {
+            name: { type: String, required: true },
+            price: { type: Number, required: true },
+        },
+    ],
 });
 export interface IMenuItem extends Document {
     name: string;
@@ -52,7 +57,7 @@ const MenuItemSchema = new Schema<IMenuItem>({
     name: {
         type: String,
         required: true,
-        unique:true,
+        unique: true,
     },
     description: {
         type: String,
@@ -61,9 +66,9 @@ const MenuItemSchema = new Schema<IMenuItem>({
         type: Number,
         required: true,
     },
-    tag:{
-        type:String,
-        enum:[null,'best_seller','must_try','our_special']
+    tag: {
+        type: String,
+        enum: [null, 'best_seller', 'must_try', 'our_special'],
     },
     image: {
         type: String,
