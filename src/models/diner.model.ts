@@ -12,6 +12,7 @@ export interface IDiner extends Document {
     otpExpirationTime?: number;
     createdAt?: Date;
     createOtpToken(): string;
+    role:string;
 }
 
 const dinerSchema = new Schema<IDiner>({
@@ -19,12 +20,8 @@ const dinerSchema = new Schema<IDiner>({
         type: String,
         required: [true, 'Please provide your name.'],
     },
-    email: {
-        type: String,
-        required: [true, 'Please provide your email address.'],
-        lowercase: true,
-        validate: [validator.isEmail, 'Please provide a valid email.'],
-    },
+    email: { type: String, unique: true, sparse: true },
+    role: { type: String, enum: ['guest', 'registered'], required: true, default:'registered' },
 
     contactNumber: {
         type: Number,

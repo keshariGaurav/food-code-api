@@ -42,6 +42,22 @@ const createSendToken = (diner: IDiner, statusCode: number, res: Response) => {
         },
     });
 };
+const createAndReturnToken = (diner: IDiner, statusCode: number, res: Response) => {
+    const token = signToken(diner._id);
+    const cookieOptions = {
+        httpOnly: true,
+        secure: false,
+        path: '/',
+        maxAge: 999999999,
+    };
+
+    // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+    res.cookie('jwt', token, cookieOptions);
+    diner.otp = undefined;
+
+   res.redirect('http://localhost:5173');
+};
 
 export const sendLoginOtp = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -120,6 +136,16 @@ export const authCallback = catchAsync(
         if (!diner) {
             return next(new AppError('No Email found!', 400));
         }
+        createAndReturnToken(diner, 200, res);
+    }
+);
+
+export const createGuest = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        let {name} = req.body;
+        name = name?? 'Guest User';
+        const diner = await Diner.create({  name,role:'guest' });
+
         createSendToken(diner, 200, res);
     }
 );

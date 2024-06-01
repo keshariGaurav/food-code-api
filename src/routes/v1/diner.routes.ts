@@ -8,6 +8,8 @@ const router = express.Router();
 router.get('/', v1DinerControllers.getAll);
 router.get('/:id', v1DinerControllers.getOne);
 router.post('/',  v1DinerControllers.create);
+router.post('/guest-login', v1AuthDinerControllers.createGuest);
+
 router.get(
     '/auth/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
