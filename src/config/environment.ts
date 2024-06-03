@@ -5,4 +5,3 @@ const gessProductionMode = (): boolean => {
 };
 
 export { ENVIRONMENT, gessProductionMode };
- 

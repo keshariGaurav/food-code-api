@@ -1,6 +1,8 @@
 import express from 'express';
-import { v1AuthCafeControllers,v1CafeProfileControllers } from '../../controllers/index';
-
+import {
+    v1AuthCafeControllers,
+    v1CafeProfileControllers,
+} from '../../controllers/index';
 
 const router = express.Router();
 router.get('/', v1CafeProfileControllers.getAll);

@@ -217,13 +217,12 @@ export const protect = catchAsync(
 
 export const verifyLoggedIn = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-
         res.status(201).json({
             status: 'Success',
-            message:
-                'You are logged In.',
+            message: 'You are logged In.',
         });
-    });
+    }
+);
 
 export const restrictTo = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -302,7 +301,7 @@ export const resetPassword = catchAsync(
             .digest('hex');
 
         const cafe = await Cafe.findOne({
-            email:req.body.email,
+            email: req.body.email,
             passwordResetToken: hashedToken,
             passwordResetExpires: { $gt: new Date() },
         });
@@ -331,7 +330,7 @@ export const updatePassword = catchAsync(
         ) {
             return next(
                 new AppError(
-                    'You\'ve entered the wrong password. If you forgot your password, please reset it.',
+                    "You've entered the wrong password. If you forgot your password, please reset it.",
                     401
                 )
             );

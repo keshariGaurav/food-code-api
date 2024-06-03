@@ -4,8 +4,6 @@ import AppError from '../../utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 import { generateQR } from '../../utils/qr/qr';
 
-
-
 export const getOne = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const cafe = await CafeProfile.findById(req.params.id);
@@ -15,7 +13,7 @@ export const getOne = catchAsync(
         res.status(200).json({
             status: 'success',
             data: {
-                cafe
+                cafe,
             },
         });
     }
@@ -63,7 +61,7 @@ export const update = catchAsync(
         res.status(200).json({
             status: 'success',
             data: {
-                cafe
+                cafe,
             },
         });
     }
@@ -74,23 +72,21 @@ export const getQr = catchAsync(
         const url = 'http://localhost:3100/';
         const table = req.body.table;
         const response = [];
-        for (const i of table){
+        for (const i of table) {
             console.log(i);
             console.log(`${url}tableNo=${i}`);
             const qrCodeImage = await generateQR(`${url}?tableNo=${i}`);
             console.log(qrCodeImage);
             response.push({
                 tableNo: i,
-                qrCodeImage : qrCodeImage
+                qrCodeImage: qrCodeImage,
             });
         }
         res.status(201).json({
             status: 'success',
-            data : {
-                response
-            }
+            data: {
+                response,
+            },
         });
     }
 );
-
-

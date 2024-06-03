@@ -42,6 +42,26 @@ const createSendToken = (diner: IDiner, statusCode: number, res: Response) => {
         },
     });
 };
+const createAndReturnToken = (
+    diner: IDiner,
+    statusCode: number,
+    res: Response
+) => {
+    const token = signToken(diner._id);
+    const cookieOptions = {
+        httpOnly: true,
+        secure: false,
+        path: '/',
+        maxAge: 999999999,
+    };
+
+    // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+    res.cookie('jwt', token, cookieOptions);
+    diner.otp = undefined;
+
+    res.redirect('http://localhost:5173');
+};
 
 export const sendLoginOtp = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -89,7 +109,7 @@ export const sendLoginOtp = catchAsync(
 
 export const login = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { email,otp } = req.body;
+        const { email, otp } = req.body;
 
         if (!email || !otp) {
             return next(new AppError('Please provide email and OTP', 400));
@@ -99,7 +119,7 @@ export const login = catchAsync(
             .update(otp)
             .digest('hex');
 
-        const diner = await Diner.findOne({ email,otp:hashedToken });
+        const diner = await Diner.findOne({ email, otp: hashedToken });
 
         if (!diner) {
             return next(new AppError('Incorrect OTP!', 400));
@@ -109,7 +129,6 @@ export const login = catchAsync(
         await diner.save();
 
         createSendToken(diner, 200, res);
-        
     }
 );
 
@@ -120,6 +139,16 @@ export const authCallback = catchAsync(
         if (!diner) {
             return next(new AppError('No Email found!', 400));
         }
+        createAndReturnToken(diner, 200, res);
+    }
+);
+
+export const createGuest = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        let { name } = req.body;
+        name = name ?? 'Guest User';
+        const diner = await Diner.create({ name, role: 'guest' });
+
         createSendToken(diner, 200, res);
     }
 );

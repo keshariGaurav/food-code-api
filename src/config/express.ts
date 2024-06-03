@@ -30,7 +30,7 @@ const configureExpressApp = (
     app.use(helmet());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json({ limit: '10mb' }));
- 
+
     app.use(mongoSanitize());
     app.use(passport.initialize());
 

@@ -10,4 +10,4 @@ const generateQR = async (text: string) => {
     }
 };
 
-export { generateQR};
+export { generateQR };

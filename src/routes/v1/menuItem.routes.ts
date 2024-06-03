@@ -15,17 +15,20 @@ router.post('/available/:id', v1MenuItemControllers.updateAval);
 
 router.get('/', v1MenuItemControllers.getAll);
 router.get('/:id', v1MenuItemControllers.getOne);
-router.post('/', v1AuthCafeControllers.protect,v1MenuItemControllers.create);
+router.post('/', v1AuthCafeControllers.protect, v1MenuItemControllers.create);
 router.patch(
-    '/:id',v1AuthCafeControllers.protect,
+    '/:id',
+    v1AuthCafeControllers.protect,
     v1MenuItemControllers.update
 );
 router.put(
     '/:id',
-    v1AuthCafeControllers.protect,v1MenuItemControllers.deleteAndCreate
+    v1AuthCafeControllers.protect,
+    v1MenuItemControllers.deleteAndCreate
 );
 router.delete(
-    '/:id',v1AuthCafeControllers.protect,
+    '/:id',
+    v1AuthCafeControllers.protect,
     v1MenuItemControllers.remove
 );
 export { router };
