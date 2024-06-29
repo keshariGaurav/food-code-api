@@ -12,7 +12,7 @@ const ratingSchema = new Schema<IRating>({
     orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'diner', required: true },
     feedback: { type: String, required: true }
-})
+});
 ratingSchema.index({ orderId: 1, userId: 1 }, { unique: true });
 const Rating = mongoose.model<IRating>('Rating', ratingSchema);
 
