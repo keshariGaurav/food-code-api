@@ -48,13 +48,11 @@ export const create = catchAsync(
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.body);
         const cafe = await CafeProfile.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true, runValidators: true }
         );
-        console.log(cafe);
         if (!cafe) {
             return next(new AppError('CafeProfile not found', 404));
         }
@@ -73,10 +71,7 @@ export const getQr = catchAsync(
         const table = req.body.table;
         const response = [];
         for (const i of table) {
-            console.log(i);
-            console.log(`${url}tableNo=${i}`);
             const qrCodeImage = await generateQR(`${url}?tableNo=${i}`);
-            console.log(qrCodeImage);
             response.push({
                 tableNo: i,
                 qrCodeImage: qrCodeImage,
