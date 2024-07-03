@@ -58,7 +58,6 @@ app.use(express.json());
 
 app.use('/api', rootRouter);
 io.on('connection', async (socket) => {
-    console.log(socket);
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
@@ -68,7 +67,6 @@ const OrderStream = Order.watch([
 ]);
 
 OrderStream.on('change', async (change) => {
-    console.log('Change detected:', change);
     if (change.operationType === 'insert') {
         const orderId = change.fullDocument._id;
         const populatedOrder = await Order.findById(orderId)

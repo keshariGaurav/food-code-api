@@ -11,7 +11,6 @@ import Rating from '../../models/rating.model';
 export const verifyRating = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const {orderId }= req.body;
-        console.log((req.user as IDiner)._id);
         
         try{
             const order = await Order.findById(orderId);

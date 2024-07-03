@@ -6,6 +6,7 @@ import catchAsync from '../../utils/common/error/catchAsync';
 import sendEmail from '../..//utils/email/email';
 import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+import { invalidateCacheByTag } from '../../utils/cache/cacheUtils';
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const menuItems = await MenuItem.find({}, '-image');
@@ -33,6 +34,7 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        await invalidateCacheByTag('menu-items');
         const newItem = await MenuItem.create(req.body);
         res.status(201).json({
             status: 'success',
