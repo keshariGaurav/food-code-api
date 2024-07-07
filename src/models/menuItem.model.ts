@@ -74,7 +74,7 @@ const MenuItemSchema = new Schema<IMenuItem>({
     },
     image: {
         type: String,
-        required: false,
+        required: true,
     },
     available: {
         type: Boolean,
