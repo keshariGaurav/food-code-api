@@ -51,6 +51,8 @@ export interface IMenuItem extends Document {
     available: boolean;
     categoryId: Schema.Types.ObjectId;
     addOnItems: IAddOnItem[];
+    orderCount: number;
+
 }
 
 const MenuItemSchema = new Schema<IMenuItem>({
@@ -84,6 +86,10 @@ const MenuItemSchema = new Schema<IMenuItem>({
         required: true,
     },
     addOnItems: [AddOnItemSchema],
+    orderCount : {
+        type: Number,
+        default: 0
+    }
 });
 
 MenuItemSchema.pre('save', async function (next) {

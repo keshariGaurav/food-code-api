@@ -140,3 +140,17 @@ export const getAllByCategory = catchAsync(
         });
     }
 );
+
+export const getTopMenuItem = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const topOrderedItems = await MenuItem.find().sort({ orderCount: -1 }).limit(10);
+        if (!topOrderedItems) {
+            return next(new AppError('An error occurred while fetching the top ordered items', 404));
+        }
+        res.status(201).json({
+            status: 'success',
+            data: topOrderedItems,
+        });
+
+    }
+);

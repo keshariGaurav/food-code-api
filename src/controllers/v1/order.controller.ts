@@ -1,4 +1,5 @@
 import Order from '../../models/order.model';
+import MenuItem from '../../models/menuItem.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
@@ -35,6 +36,15 @@ export const getOne = catchAsync(
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const result = await Order.create(req.body);
+        // console.log(req.body);
+        const {menuItems} = req.body;
+        for(const menuItem of menuItems){
+            // console.log(menuItem.menuItemId);
+            const menu = await MenuItem.findById(menuItem.menuItemId);
+            menu.orderCount++;
+            menu.save();
+            // console.log(menu);
+        }
         res.status(201).json({
             status: 'success',
             data: result,

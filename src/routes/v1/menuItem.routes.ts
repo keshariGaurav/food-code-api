@@ -11,6 +11,8 @@ router.get(
     '/category',cacheMiddleware(['menu-items']),
     v1MenuItemControllers.getAllByCategory
 );
+router.get('/top-ordered-items' , v1AuthCafeControllers.protect, v1MenuItemControllers.getTopMenuItem);
+
 router.post('/available/:id', v1MenuItemControllers.updateAval);
 
 router.get('/', v1MenuItemControllers.getAll);
