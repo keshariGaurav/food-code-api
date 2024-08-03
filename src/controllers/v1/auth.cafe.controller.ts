@@ -50,7 +50,6 @@ const createSendPasswordResetToken = async (
     )}/api/v1/user/verifyEmail/${verificationToken}`;
     const message = `Verify Your email clicking to :${url}.\n`;
     try {
-         
     } catch (err) {
         return next(
             new AppError(
@@ -77,13 +76,13 @@ export const signup = catchAsync(
         )}/api/v1/cafe/verifyEmail/${verificationToken}`;
         const message = `Dear ${newUser.name}, Thank you for registering with our service. We're excited to have you on board! To complete your registration process, please verify your email address by clicking on the following verification token it will be valid for a day.: :${url}.\n`;
         try {
-             await emailQueue.add('sendEmail', {
-                 templateName: 'loginOTP',
-                 to: req.body.email,
-                 data: {
-                     otp: url,
-                 },
-             });
+            await emailQueue.add('sendEmail', {
+                templateName: 'loginOTP',
+                to: req.body.email,
+                data: {
+                    otp: url,
+                },
+            });
             res.status(202).json({
                 status: 'Success',
                 message:
@@ -128,13 +127,13 @@ export const login = catchAsync(
             )}/api/v1/cafe/verifyEmail/${verificationToken}`;
             const message = `Dear ${cafe.name}, Thank you for registering with our service. We're excited to have you on board! To complete your registration process, please verify your email address by clicking on the following verification token it will be valid for a day.: :${url}.\n`;
             try {
-                 await emailQueue.add('sendEmail', {
-                     templateName: 'loginOTP',
-                     to: req.body.email,
-                     data: {
-                         otp: url,
-                     },
-                 });
+                await emailQueue.add('sendEmail', {
+                    templateName: 'loginOTP',
+                    to: req.body.email,
+                    data: {
+                        otp: url,
+                    },
+                });
                 res.status(202).json({
                     status: 'Success',
                     message:
@@ -268,15 +267,14 @@ export const forgotPassword = catchAsync(
         const resetToken = user.createPasswordResetToken();
         await user.save({ validateBeforeSave: false });
 
-
         try {
-             await emailQueue.add('sendEmail', {
-                 templateName: 'loginOTP',
-                 to: user.email,
-                 data: {
-                     otp: resetToken,
-                 },
-             });
+            await emailQueue.add('sendEmail', {
+                templateName: 'loginOTP',
+                to: user.email,
+                data: {
+                    otp: resetToken,
+                },
+            });
             res.status(200).json({
                 status: 'Success',
                 message: 'Token sent to email!.',
