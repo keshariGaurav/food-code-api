@@ -36,11 +36,11 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const dinerId =(req.user as IDiner)._id
+        const dinerId =(req.user as IDiner)._id;
         const items = req.body;
         console.log(items);
        let amount =0;
-       let menus: { menuItemId: any; quantity: any; price: number; totalAmount: number; addOnItems: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[]; }[] = [];
+       const menus: { menuItemId: any; quantity: any; price: number; totalAmount: number; addOnItems: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[]; }[] = [];
         const menuItemsPromises = Object.keys(items).map(async key => {
             const item = items[key];
             const menu = await MenuItem.findById(item.menuId);
@@ -52,20 +52,20 @@ export const create = catchAsync(
             amount += menu.price * item.quantity;
             menu.orderCount++;
             menu.save();
-            let addOns: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[] = [];
+            const addOns: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[] = [];
             if (item.selectedItems) {
                 Object.keys(item.selectedItems).map(selectedItemKey => {
                     const addedItems = new Set(item.selectedItems[selectedItemKey]);
                     const selectedAddOn = menu.addOnItems.find(addOnItem => addOnItem._id.toString() === selectedItemKey.toString());
                     if (selectedAddOn) {
-                        let addedAddOns: { name: string; price: number; }[] = []
+                        const addedAddOns: { name: string; price: number; }[] = [];
                         selectedAddOn.items.forEach(it => {
                             if (addedItems.has(it._id.toString())) {
                                 amount += it.price;
                                 const addedAddOn = {
                                     name:it.name,
                                     price:it.price
-                                }
+                                };
                                 addedAddOns.push(addedAddOn);
                             }
                         });
@@ -73,7 +73,7 @@ export const create = catchAsync(
                             addOnItemId:selectedAddOn._id,
                             addOnItemName:selectedAddOn.name,
                             selectedItems: addedAddOns
-                        }
+                        };
                         addOns.push(addon);
                         
                     }
@@ -88,7 +88,7 @@ export const create = catchAsync(
                 totalAmount : item.quantity*menu.price,
                 addOnItems: addOns
 
-            }
+            };
             menus.push(menuItem);
         });
 
@@ -101,7 +101,7 @@ export const create = catchAsync(
             totalAmount: amount,
             menuItems: menus
 
-        }
+        };
         console.log(newOrder);
         const result = await Order.create(newOrder);
         res.status(201).json({
