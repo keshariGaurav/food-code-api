@@ -1,29 +1,50 @@
 import nodemailer, { Transporter } from 'nodemailer';
+import EmailTemplate from './emailTemplate';
+import { templates } from './templates';
 
 interface EmailOptions {
-    email: string;
+    to: string;
     subject: string;
-    message: string;
+    text?: string;
+    html?: string;
 }
 
-const sendEmail = async (options: EmailOptions): Promise<void> => {
-    const transporter: Transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT),
-        auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD,
-        },
-    });
+class Email {
+    private transporter: Transporter;
 
-    const mailOptions = {
-        from: 'Gaurav Keshari',
-        to: options.email,
-        subject: options.subject,
-        text: options.message,
-    };
+    constructor() {
+        this.transporter = nodemailer.createTransport({
+            host: process.env.EMAIL_HOST,
+            port: Number(process.env.EMAIL_PORT),
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+    }
+    private async sendMail(options: EmailOptions): Promise<void> {
+        const mailOptions = {
+            from: 'Easy Eats',
+            to: options.to,
+            subject: options.subject,
+            text: options.text,
+            html: options.html,
+        };
 
-    await transporter.sendMail(mailOptions);
-};
+        await this.transporter.sendMail(mailOptions);
+    }
 
-export default sendEmail;
+    public async sendTemplatedEmail(
+        templateName: keyof typeof templates,
+        to: string,
+        data: { [key: string]: string }
+    ): Promise<void> {
+        const template = new EmailTemplate(templateName);
+        const subject = template.getSubject(data);
+        const text = template.getText(data);
+        const html = template.getHtml(data);
+        await this.sendMail({ to, subject, text, html });
+    }
+}
+
+export default Email;

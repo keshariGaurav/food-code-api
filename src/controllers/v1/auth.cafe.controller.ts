@@ -2,7 +2,8 @@ import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import crypto from 'crypto';
 import Cafe, { ICafe } from '../../models/cafe.model';
 import catchAsync from '../../utils/common/error/catchAsync';
-import sendEmail from '../..//utils/email/email';
+import emailQueue from '../../config/bullMq';
+import '../../utils/email/emailProcessor';
 import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 
@@ -49,11 +50,6 @@ const createSendPasswordResetToken = async (
     )}/api/v1/user/verifyEmail/${verificationToken}`;
     const message = `Verify Your email clicking to :${url}.\n`;
     try {
-        await sendEmail({
-            email,
-            subject: 'Verification Email Token.',
-            message,
-        });
     } catch (err) {
         return next(
             new AppError(
@@ -80,10 +76,12 @@ export const signup = catchAsync(
         )}/api/v1/cafe/verifyEmail/${verificationToken}`;
         const message = `Dear ${newUser.name}, Thank you for registering with our service. We're excited to have you on board! To complete your registration process, please verify your email address by clicking on the following verification token it will be valid for a day.: :${url}.\n`;
         try {
-            await sendEmail({
-                email: req.body.email,
-                subject: 'Account Registration - Email Verification Token.',
-                message,
+            await emailQueue.add('sendEmail', {
+                templateName: 'loginOTP',
+                to: req.body.email,
+                data: {
+                    otp: url,
+                },
             });
             res.status(202).json({
                 status: 'Success',
@@ -129,10 +127,12 @@ export const login = catchAsync(
             )}/api/v1/cafe/verifyEmail/${verificationToken}`;
             const message = `Dear ${cafe.name}, Thank you for registering with our service. We're excited to have you on board! To complete your registration process, please verify your email address by clicking on the following verification token it will be valid for a day.: :${url}.\n`;
             try {
-                await sendEmail({
-                    email: req.body.email,
-                    subject: 'Account Registration - Email Verification Token.',
-                    message,
+                await emailQueue.add('sendEmail', {
+                    templateName: 'loginOTP',
+                    to: req.body.email,
+                    data: {
+                        otp: url,
+                    },
                 });
                 res.status(202).json({
                     status: 'Success',
@@ -267,13 +267,13 @@ export const forgotPassword = catchAsync(
         const resetToken = user.createPasswordResetToken();
         await user.save({ validateBeforeSave: false });
 
-        const message = `Forgot your password? Your Password Reset OTP is ${resetToken}.\n If you didn't forget your password please ignore this email.`;
-
         try {
-            await sendEmail({
-                email: user.email,
-                subject: 'Your Password Reset Token (valid for 10 mins)',
-                message,
+            await emailQueue.add('sendEmail', {
+                templateName: 'loginOTP',
+                to: user.email,
+                data: {
+                    otp: resetToken,
+                },
             });
             res.status(200).json({
                 status: 'Success',

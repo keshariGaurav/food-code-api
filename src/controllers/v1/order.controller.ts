@@ -37,8 +37,8 @@ export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const result = await Order.create(req.body);
         // console.log(req.body);
-        const {menuItems} = req.body;
-        for(const menuItem of menuItems){
+        const { menuItems } = req.body;
+        for (const menuItem of menuItems) {
             // console.log(menuItem.menuItemId);
             const menu = await MenuItem.findById(menuItem.menuItemId);
             menu.orderCount++;

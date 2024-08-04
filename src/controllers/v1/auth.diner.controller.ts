@@ -5,6 +5,8 @@ import catchAsync from '../../utils/common/error/catchAsync';
 import sendEmail from '../../utils/email/email';
 import AppError from '../../utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+import emailQueue from '../../config/bullMq';
+import '../../utils/email/emailProcessor';
 
 interface User {
     email: string;
@@ -84,10 +86,17 @@ export const sendLoginOtp = catchAsync(
         await diner.save();
 
         try {
-            await sendEmail({
-                email: diner.email,
-                subject: 'Your Password Reset Token (valid for 10 mins)',
-                message: `Please Enter the OTP to get logged in.The OTP is ${resetToken}`,
+            // await sendEmail({
+            //     email: diner.email,
+            //     subject: 'Your Password Reset Token (valid for 10 mins)',
+            //     message: `Please Enter the OTP to get logged in.The OTP is ${resetToken}`,
+            // });
+            await emailQueue.add('sendEmail', {
+                templateName: 'loginOTP',
+                to: diner.email,
+                data: {
+                    otp: resetToken,
+                },
             });
             res.status(200).json({
                 status: 'Success',

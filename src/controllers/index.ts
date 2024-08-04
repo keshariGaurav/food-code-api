@@ -17,5 +17,5 @@ export {
     v1CafeProfileControllers,
     v1AuthDinerControllers,
     v1AuthRatingControllers,
-    v1RatingControllers
+    v1RatingControllers,
 };

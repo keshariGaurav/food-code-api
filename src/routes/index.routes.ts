@@ -15,7 +15,6 @@ rootRouter.use('/v1/category', v1CategoryItemRouter);
 rootRouter.use('/v1/order', v1OrderRouter);
 rootRouter.use('/v1/diner', v1DinerRouter);
 rootRouter.use('/v1/account', v1CafeProfileRouter);
-rootRouter.use('/v1/rating' , v1RatingRouter);
-
+rootRouter.use('/v1/rating', v1RatingRouter);
 
 export { rootRouter };
