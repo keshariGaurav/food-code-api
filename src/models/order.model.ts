@@ -69,7 +69,7 @@ const OrderSchema = new Schema<IOrder>({
     },
     menuItems: [OrderItemSchema],
     totalAmount: { type: Number, required: true },
-    tableNumber: { type: Number, required: true },
+    tableNumber: { type: Number, required: true , default: 1},
 
     status: {
         type: String,

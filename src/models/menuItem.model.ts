@@ -1,4 +1,4 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, ObjectId, Schema, model } from 'mongoose';
 import Category from './category.model';
 
 export interface IAddOnItem extends Document {
@@ -12,6 +12,7 @@ export interface IAddOnItem extends Document {
         {
             name: string;
             price: number;
+            _id:ObjectId;
         }
     ];
 }
@@ -73,7 +74,7 @@ const MenuItemSchema = new Schema<IMenuItem>({
     },
     image: {
         type: String,
-        required: true,
+        required: false,
     },
     available: {
         type: Boolean,

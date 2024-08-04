@@ -9,7 +9,6 @@ const upload = multer();
 const router = express.Router();
 router.get(
     '/category',
-    cacheMiddleware(['menu-items']),
     v1MenuItemControllers.getAllByCategory
 );
 router.get(

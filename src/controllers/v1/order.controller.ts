@@ -3,6 +3,7 @@ import MenuItem from '../../models/menuItem.model';
 import catchAsync from '../../utils/common/error/catchAsync';
 import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+import { IDiner } from '../../models/diner.model';
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const queryObj =
@@ -35,16 +36,74 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const result = await Order.create(req.body);
-        // console.log(req.body);
-        const { menuItems } = req.body;
-        for (const menuItem of menuItems) {
-            // console.log(menuItem.menuItemId);
-            const menu = await MenuItem.findById(menuItem.menuItemId);
+        const dinerId =(req.user as IDiner)._id
+        const items = req.body;
+        console.log(items);
+       let amount =0;
+       let menus: { menuItemId: any; quantity: any; price: number; totalAmount: number; addOnItems: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[]; }[] = [];
+        const menuItemsPromises = Object.keys(items).map(async key => {
+            const item = items[key];
+            const menu = await MenuItem.findById(item.menuId);
+
+            if (!menu) {
+                return next(new AppError('Menu not found', 404));
+            }
+
+            amount += menu.price * item.quantity;
             menu.orderCount++;
             menu.save();
-            // console.log(menu);
+            let addOns: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[] = [];
+            if (item.selectedItems) {
+                Object.keys(item.selectedItems).map(selectedItemKey => {
+                    const addedItems = new Set(item.selectedItems[selectedItemKey]);
+                    const selectedAddOn = menu.addOnItems.find(addOnItem => addOnItem._id.toString() === selectedItemKey.toString());
+                    if (selectedAddOn) {
+                        let addedAddOns: { name: string; price: number; }[] = []
+                        selectedAddOn.items.forEach(it => {
+                            if (addedItems.has(it._id.toString())) {
+                                amount += it.price;
+                                const addedAddOn = {
+                                    name:it.name,
+                                    price:it.price
+                                }
+                                addedAddOns.push(addedAddOn);
+                            }
+                        });
+                        const addon = {
+                            addOnItemId:selectedAddOn._id,
+                            addOnItemName:selectedAddOn.name,
+                            selectedItems: addedAddOns
+                        }
+                        addOns.push(addon);
+                        
+                    }
+
+                });
+
+            }
+            const menuItem = {
+                menuItemId : item.menuId,
+                quantity : item.quantity,
+                price : menu.price,
+                totalAmount : item.quantity*menu.price,
+                addOnItems: addOns
+
+            }
+            menus.push(menuItem);
+        });
+
+
+        await Promise.all(menuItemsPromises);
+
+        console.log(amount);
+        const newOrder = {
+            dinerId,
+            totalAmount: amount,
+            menuItems: menus
+
         }
+        console.log(newOrder);
+        const result = await Order.create(newOrder);
         res.status(201).json({
             status: 'success',
             data: result,
