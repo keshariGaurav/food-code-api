@@ -37,7 +37,7 @@ export const getOne = catchAsync(
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const dinerId =(req.user as IDiner)._id;
-        const items = req.body;
+        const {items , cookingRequest}= req.body;
         console.log(items);
        let amount =0;
        const menus: { menuItemId: any; quantity: any; price: number; totalAmount: number; addOnItems: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[]; }[] = [];
@@ -50,8 +50,6 @@ export const create = catchAsync(
             }
 
             amount += menu.price * item.quantity;
-            menu.orderCount++;
-            menu.save();
             const addOns: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[] = [];
             if (item.selectedItems) {
                 Object.keys(item.selectedItems).map(selectedItemKey => {
@@ -62,34 +60,32 @@ export const create = catchAsync(
                         selectedAddOn.items.forEach(it => {
                             if (addedItems.has(it._id.toString())) {
                                 amount += it.price;
-                                const addedAddOn = {
+                                addedAddOns.push({
                                     name:it.name,
                                     price:it.price
-                                };
-                                addedAddOns.push(addedAddOn);
+                                });
                             }
                         });
-                        const addon = {
+                        addOns.push({
                             addOnItemId:selectedAddOn._id,
                             addOnItemName:selectedAddOn.name,
                             selectedItems: addedAddOns
-                        };
-                        addOns.push(addon);
+                        });
                         
                     }
 
                 });
 
             }
-            const menuItem = {
+            menus.push({
                 menuItemId : item.menuId,
                 quantity : item.quantity,
                 price : menu.price,
                 totalAmount : item.quantity*menu.price,
                 addOnItems: addOns
 
-            };
-            menus.push(menuItem);
+            });
+            await MenuItem.findByIdAndUpdate(item.menuId, { $inc: { orderCount: 1 } });
         });
 
 
@@ -99,7 +95,8 @@ export const create = catchAsync(
         const newOrder = {
             dinerId,
             totalAmount: amount,
-            menuItems: menus
+            menuItems: menus,
+            cookingRequest
 
         };
         console.log(newOrder);
