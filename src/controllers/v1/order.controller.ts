@@ -36,77 +36,84 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const dinerId =(req.user as IDiner)._id;
-        const {items , cookingRequest}= req.body;
-        console.log(items);
-       let amount =0;
-       const menus: { menuItemId: any; quantity: any; price: number; totalAmount: number; addOnItems: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[]; }[] = [];
-        const menuItemsPromises = Object.keys(items).map(async key => {
-            const item = items[key];
-            const menu = await MenuItem.findById(item.menuId);
+        try {
+            const dinerId = (req.user as IDiner)._id;
+            const { items, cookingRequest } = req.body;
+            console.log(items);
 
-            if (!menu) {
-                return next(new AppError('Menu not found', 404));
+            const menuIds = Object.values(items).map((item: any) => item.menuId);
+            const menusData = await MenuItem.find({ _id: { $in: menuIds } });
+
+            const foundMenuIds = menusData.map(menu => menu._id.toString());
+            const missingMenuIds = menuIds.filter(id => !foundMenuIds.includes(id));
+
+            if (missingMenuIds.length > 0) {
+                return next(new AppError(`Menu items not found for IDs: ${missingMenuIds.join(', ')}`, 404));
             }
 
-            amount += menu.price * item.quantity;
-            const addOns: { addOnItemId: any; addOnItemName: string; selectedItems: { name: string; price: number; }[]; }[] = [];
-            if (item.selectedItems) {
-                Object.keys(item.selectedItems).map(selectedItemKey => {
-                    const addedItems = new Set(item.selectedItems[selectedItemKey]);
-                    const selectedAddOn = menu.addOnItems.find(addOnItem => addOnItem._id.toString() === selectedItemKey.toString());
-                    if (selectedAddOn) {
-                        const addedAddOns: { name: string; price: number; }[] = [];
-                        selectedAddOn.items.forEach(it => {
-                            if (addedItems.has(it._id.toString())) {
-                                amount += it.price;
-                                addedAddOns.push({
-                                    name:it.name,
-                                    price:it.price
-                                });
-                            }
-                        });
-                        addOns.push({
-                            addOnItemId:selectedAddOn._id,
-                            addOnItemName:selectedAddOn.name,
-                            selectedItems: addedAddOns
-                        });
-                        
-                    }
+            let amount = 0;
+            const menus = Object.values(items).map((item: any) => {
+                const menu = menusData.find(menu => menu._id.toString() === item.menuId);
 
-                });
+                amount += menu.price * item.quantity;
 
-            }
-            menus.push({
-                menuItemId : item.menuId,
-                quantity : item.quantity,
-                price : menu.price,
-                totalAmount : item.quantity*menu.price,
-                addOnItems: addOns
+                const addOns = item.selectedItems
+                    ? Object.entries(item.selectedItems).map(([selectedItemKey, selectedItemIds]: [string, any]) => {
+                          const selectedAddOn = menu.addOnItems.find(addOnItem =>
+                              addOnItem._id.toString() === selectedItemKey
+                          );
 
+                          if (selectedAddOn) {
+                              const addedAddOns = selectedAddOn.items
+                                  .filter(it => selectedItemIds.includes(it._id.toString()))
+                                  .map(it => {
+                                      amount += it.price;
+                                      return { name: it.name, price: it.price };
+                                  });
+
+                              return {
+                                  addOnItemId: selectedAddOn._id,
+                                  addOnItemName: selectedAddOn.name,
+                                  selectedItems: addedAddOns,
+                              };
+                          }
+                          return null;
+                      }).filter(addOn => addOn !== null)
+                    : [];
+
+                return {
+                    menuItemId: item.menuId,
+                    quantity: item.quantity,
+                    price: menu.price,
+                    totalAmount: item.quantity * menu.price,
+                    addOnItems: addOns,
+                };
             });
-            await MenuItem.findByIdAndUpdate(item.menuId, { $inc: { orderCount: 1 } });
-        });
+            await MenuItem.updateMany(
+                { _id: { $in: menuIds } },
+                { $inc: { orderCount: 1 } }
+            );
 
+            const newOrder = {
+                dinerId,
+                totalAmount: amount,
+                menuItems: menus,
+                cookingRequest,
+            };
+            console.log(newOrder);
 
-        await Promise.all(menuItemsPromises);
-
-        console.log(amount);
-        const newOrder = {
-            dinerId,
-            totalAmount: amount,
-            menuItems: menus,
-            cookingRequest
-
-        };
-        console.log(newOrder);
-        const result = await Order.create(newOrder);
-        res.status(201).json({
-            status: 'success',
-            data: result,
-        });
+            const result = await Order.create(newOrder);
+            res.status(201).json({
+                status: 'success',
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 );
+
+
 
 export const update = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
