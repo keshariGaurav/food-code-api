@@ -36,7 +36,6 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        try {
             const dinerId = (req.user as IDiner)._id;
             const { items, cookingRequest } = req.body;
             console.log(items);
@@ -107,9 +106,7 @@ export const create = catchAsync(
                 status: 'success',
                 data: result,
             });
-        } catch (error) {
-            next(error);
-        }
+        
     }
 );
 
