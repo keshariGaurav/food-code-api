@@ -23,6 +23,7 @@ interface IOrder extends Document {
     tableNumber: number;
     totalAmount: number;
     orderNumber: number;
+    cookingRequest: string;
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -69,7 +70,7 @@ const OrderSchema = new Schema<IOrder>({
     },
     menuItems: [OrderItemSchema],
     totalAmount: { type: Number, required: true },
-    tableNumber: { type: Number, required: true },
+    tableNumber: { type: Number, required: true , default: 1},
 
     status: {
         type: String,
@@ -81,6 +82,8 @@ const OrderSchema = new Schema<IOrder>({
         default: new Date(),
     },
     orderNumber: { type: Number },
+    cookingRequest: {type: String , default: ""}
+
 });
 
 OrderSchema.pre<IOrder>('save', async function (next) {
