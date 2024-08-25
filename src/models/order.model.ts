@@ -26,6 +26,7 @@ interface IOrder extends Document {
     cookingRequest: string;
     razorpayOrderId : string;
     razorpayPaymentId: string;
+
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -84,9 +85,13 @@ const OrderSchema = new Schema<IOrder>({
         default: new Date(),
     },
     orderNumber: { type: Number },
+
     cookingRequest: {type: String , default: ""},
     razorpayOrderId: { type: String },
     razorpayPaymentId : {type : String}
+
+    
+
 
 });
 

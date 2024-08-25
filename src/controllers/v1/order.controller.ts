@@ -5,7 +5,7 @@ import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 import { IDiner } from '../../models/diner.model';
 import Razorpay from 'razorpay';
-import * as crypto from 'crypto';
+
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const queryObj =
@@ -42,6 +42,7 @@ export const create = catchAsync(
             key_id: process.env.RAZORPAY_KEY_ID, 
             key_secret: process.env.RAZORPAY_KEY_SECRET,
         }); 
+
             const dinerId = (req.user as IDiner)._id;
             const { items, cookingRequest } = req.body;
             console.log(items);
@@ -120,6 +121,12 @@ export const create = catchAsync(
             res.status(201).json({
                 status: 'success',
                 data: order,
+
+            const result = await Order.create(newOrder);
+            res.status(201).json({
+                status: 'success',
+                data: result,
+
             });
         
     }
