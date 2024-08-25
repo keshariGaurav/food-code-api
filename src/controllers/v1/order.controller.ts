@@ -5,6 +5,7 @@ import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 import { IDiner } from '../../models/diner.model';
 import Razorpay from 'razorpay';
+import * as crypto from 'crypto';
 
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -121,11 +122,6 @@ export const create = catchAsync(
             res.status(201).json({
                 status: 'success',
                 data: order,
-
-            const result = await Order.create(newOrder);
-            res.status(201).json({
-                status: 'success',
-                data: result,
 
             });
         
