@@ -24,6 +24,9 @@ interface IOrder extends Document {
     totalAmount: number;
     orderNumber: number;
     cookingRequest: string;
+    razorpayOrderId : string;
+    razorpayPaymentId: string;
+
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -74,7 +77,7 @@ const OrderSchema = new Schema<IOrder>({
 
     status: {
         type: String,
-        enum: ['pending', 'send_to_kitchen', 'complete'],
+        enum: ['pending', 'send_to_kitchen', 'complete', 'payment_failed'],
         default: 'pending',
     },
     orderDate: {
@@ -82,7 +85,13 @@ const OrderSchema = new Schema<IOrder>({
         default: new Date(),
     },
     orderNumber: { type: Number },
-    cookingRequest: {type: String , default: ""}
+
+    cookingRequest: {type: String , default: ""},
+    razorpayOrderId: { type: String },
+    razorpayPaymentId : {type : String}
+
+    
+
 
 });
 

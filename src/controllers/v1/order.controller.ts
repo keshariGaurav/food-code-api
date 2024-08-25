@@ -4,6 +4,9 @@ import catchAsync from '../../utils/common/error/catchAsync';
 import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
 import { IDiner } from '../../models/diner.model';
+import Razorpay from 'razorpay';
+import * as crypto from 'crypto';
+
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const queryObj =
@@ -36,6 +39,11 @@ export const getOne = catchAsync(
 
 export const create = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID, 
+            key_secret: process.env.RAZORPAY_KEY_SECRET,
+        }); 
+
             const dinerId = (req.user as IDiner)._id;
             const { items, cookingRequest } = req.body;
             console.log(items);
@@ -101,10 +109,20 @@ export const create = catchAsync(
             };
             console.log(newOrder);
 
-            const result = await Order.create(newOrder);
+            const order = await Order.create(newOrder);
+            const razorpayOrder = await razorpay.orders.create({
+                amount: order.totalAmount * 100, 
+                currency: 'INR',
+                receipt: order._id.toString(),
+                payment_capture: true
+            });
+            order.razorpayOrderId = razorpayOrder.id;
+            await order.save();
+
             res.status(201).json({
                 status: 'success',
-                data: result,
+                data: order,
+
             });
         
     }
@@ -150,3 +168,50 @@ export const remove = catchAsync(
         });
     }
 );
+
+export const verifyPayment = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { status , orderDetails } = req.body;
+      console.log(orderDetails);
+      console.log(status);
+      const orderId = orderDetails?.orderId;
+      const razorpayPaymentId = orderDetails?.paymentId;
+      const razorpaySignature = orderDetails?.signature;
+      const order = await Order.findById(orderId);
+      if (!order) {
+        return next(new AppError('Order not found', 404));
+      }
+      if(status === 'cancelled' || status === 'timedout' || status === 'failed'){
+        order.status = 'payment_failed';
+        await order.save();
+        return next(new AppError('Payment failed', 400));
+      }
+
+     
+  
+      if (!orderId || !razorpayPaymentId || !razorpaySignature) {
+        return next(new AppError('Missing payment details', 400));
+      }
+  
+     
+  
+      const generatedSignature = crypto
+        .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+        .update(`${order.razorpayOrderId}|${razorpayPaymentId}`)
+        .digest('hex');
+
+      if (generatedSignature !== razorpaySignature) {
+        order.status = 'payment_failed';
+        await order.save();
+        return next(new AppError('Invalid payment signature', 400));
+      }
+      order.razorpayPaymentId = razorpayPaymentId;
+      await order.save();
+  
+      res.status(200).json({
+        status: 'success',
+        data: order,
+      });
+    }
+  );
+
