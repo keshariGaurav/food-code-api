@@ -1,4 +1,4 @@
-import { templates } from './templates';
+import { templates } from '@/utils/email/templates';
 
 interface TemplateData {
     [key: string]: string;

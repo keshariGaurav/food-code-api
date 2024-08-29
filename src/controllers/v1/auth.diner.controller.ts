@@ -1,12 +1,13 @@
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import crypto from 'crypto';
-import Diner, { IDiner } from '../../models/diner.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import sendEmail from '../../utils/email/email';
-import AppError from '../../utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
-import emailQueue from '../../config/bullMq';
-import '../../utils/email/emailProcessor';
+
+import Diner, { IDiner } from '@/models/diner.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import sendEmail from '@/utils/email/email';
+import AppError from '@/utils/common/error/AppError';
+import emailQueue from '@/config/bullMq';
+import '@/utils/email/emailProcessor';
 
 interface User {
     email: string;

@@ -1,7 +1,7 @@
 import { Worker, Job } from 'bullmq';
-import Email from './email';
-import redisConfig from '../../config/redisClient';
-import { templates } from './templates';
+import Email from '@/utils/email/email';
+import redisConfig from '@/config/redisClient';
+import { templates } from '@/utils/email/templates';
 
 interface EmailJob {
     templateName: keyof typeof templates;

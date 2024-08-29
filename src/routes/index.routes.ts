@@ -1,10 +1,10 @@
-import { router as v1CafeRouter } from '../routes/v1/cafe.routes';
-import { router as v1MenuItemRouter } from '../routes/v1/menuItem.routes';
-import { router as v1CategoryItemRouter } from '../routes/v1/category.routes';
-import { router as v1OrderRouter } from '../routes/v1/order.routes';
-import { router as v1DinerRouter } from '../routes/v1/diner.routes';
-import { router as v1CafeProfileRouter } from '../routes/v1/cafeProfile.routes';
-import { router as v1RatingRouter } from '../routes/v1/rating.routes';
+import { router as v1CafeRouter } from '@/routes/v1/cafe.routes';
+import { router as v1MenuItemRouter } from '@/routes/v1/menuItem.routes';
+import { router as v1CategoryItemRouter } from '@/routes/v1/category.routes';
+import { router as v1OrderRouter } from '@/routes/v1/order.routes';
+import { router as v1DinerRouter } from '@/routes/v1/diner.routes';
+import { router as v1CafeProfileRouter } from '@/routes/v1/cafeProfile.routes';
+import { router as v1RatingRouter } from '@/routes/v1/rating.routes';
 
 import { Router } from 'express';
 

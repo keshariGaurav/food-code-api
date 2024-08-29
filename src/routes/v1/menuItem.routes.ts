@@ -1,7 +1,7 @@
 import express from 'express';
-import { v1MenuItemControllers } from '../../controllers/index';
-import { v1AuthCafeControllers } from '../../controllers/index';
-import cacheMiddleware from '../../middleware/cacheMiddleware';
+import { v1MenuItemControllers } from '@/controllers/index';
+import { v1AuthCafeControllers } from '@/controllers/index';
+import cacheMiddleware from '@/middleware/cacheMiddleware';
 import multer from 'multer';
 
 const upload = multer();

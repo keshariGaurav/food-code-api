@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import diner from '../models/diner.model';
-import { IDiner } from '../models/diner.model';
+import diner from '@/models/diner.model';
+import { IDiner } from '@/models/diner.model';
 
 const configurePassport = (): void => {
     passport.use(

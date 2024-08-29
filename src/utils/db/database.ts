@@ -1,5 +1,5 @@
 import { connect, ConnectOptions } from 'mongoose';
-import { logger } from '../../utils/logger/logger';
+import { logger } from '@/utils/logger/logger';
 
 const options: ConnectOptions = {
     autoIndex: true,

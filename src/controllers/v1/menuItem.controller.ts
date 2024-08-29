@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import MenuItem from '../../models/menuItem.model';
-import { IMenuItem } from '../../models/menuItem.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import sendEmail from '../..//utils/email/email';
-import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
-import { invalidateCacheByTag } from '../../utils/cache/cacheUtils';
+
+import MenuItem from '@/models/menuItem.model';
+import { IMenuItem } from '@/models/menuItem.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import sendEmail from '@/utils/email/email';
+import AppError from '@/utils/common/error/AppError';
+import { invalidateCacheByTag } from '@/utils/cache/cacheUtils';
+
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const menuItems = await MenuItem.find({}, '-image');

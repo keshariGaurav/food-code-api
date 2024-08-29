@@ -1,17 +1,20 @@
 {
     "compilerOptions": {
-        "types": ["node", "express"],
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "outDir": "dist",
-        "skipLibCheck": true
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "target": "es6",
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist",
+      "rootDir": "./src",               
+      "baseUrl": "./src",                      
+      "paths": {
+        "@/*": ["*"]
+      }
     },
-    "include": ["src/**/*", "test/**/*","server.ts"],
-    "exclude": ["test"]
-}
+    "lib": ["es2015"],
+    "include": ["./src/**/*", "./src/**/*.json"],                           
+    "ts-node": {
+      "require": ["tsconfig-paths/register"]
+    }  
+  }
