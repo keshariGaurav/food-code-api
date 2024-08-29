@@ -8,7 +8,7 @@ import rateLimit from 'express-rate-limit';
 import passport from 'passport';
 import mongoSanitize from 'express-mongo-sanitize';
 import bodyParser from 'body-parser';
-import { logger } from '../utils/logger/logger';
+import { logger } from '@/utils/logger/logger';
 
 const configureExpressApp = (
     app: Express,

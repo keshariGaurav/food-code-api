@@ -1,11 +1,12 @@
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import crypto from 'crypto';
-import Cafe, { ICafe } from '../../models/cafe.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import emailQueue from '../../config/bullMq';
-import '../../utils/email/emailProcessor';
-import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+
+import Cafe, { ICafe } from '@/models/cafe.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import emailQueue from '@/config/bullMq';
+import '@/utils/email/emailProcessor';
+import AppError from '@/utils/common/error/AppError';
 
 const signToken = (id: string, expiresIn?: string): string => {
     return jwt.sign({ id }, process.env.JWT_SECRET!, {

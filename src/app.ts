@@ -1,19 +1,21 @@
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import { configureExpressApp } from './config/express';
 import passport from 'passport';
 import session from 'express-session';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import { configurePassport } from './config/passport';
-import { dotenvExists } from './utils/common/checkDotEnv';
-import { logger } from './utils/logger/logger';
-import { rootRouter } from './routes/index.routes';
-import { connectToDb } from './utils/db/database';
-import globalErrorHandler from './controllers/v1/error.controller';
-import AppError from './utils/common/error/AppError';
 import { Server as SocketIOServer } from 'socket.io';
 import http from 'http';
-import Order from './models/order.model';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+
+import { configurePassport } from '@/config/passport';
+import { configureExpressApp } from '@/config/express';
+import { dotenvExists } from '@/utils/common/checkDotEnv';
+import { logger } from '@/utils/logger/logger';
+import { rootRouter } from '@/routes/index.routes';
+import { connectToDb } from '@/utils/db/database';
+import globalErrorHandler from '@/controllers/v1/error.controller';
+import AppError from '@/utils/common/error/AppError';
+
+import Order from '@/models/order.model';
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {

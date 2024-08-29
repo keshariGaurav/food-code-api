@@ -1,5 +1,5 @@
 import express from 'express';
-import { v1AuthDinerControllers, v1OrderControllers } from '../../controllers/index';
+import { v1AuthDinerControllers, v1OrderControllers } from '@/controllers/index';
 
 const router = express.Router();
 

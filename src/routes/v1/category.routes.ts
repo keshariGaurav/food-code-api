@@ -1,6 +1,6 @@
 import express from 'express';
-import { v1CategoryControllers } from '../../controllers/index';
-import { v1AuthCafeControllers } from '../../controllers/index';
+import { v1CategoryControllers } from '@/controllers/index';
+import { v1AuthCafeControllers } from '@/controllers/index';
 
 const router = express.Router();
 

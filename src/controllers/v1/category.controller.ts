@@ -1,6 +1,7 @@
-import Category from '../../models/category.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import AppError from '../..//utils/common/error/AppError';
+import Category from '@/models/category.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import AppError from '@/utils/common/error/AppError';
+
 import { Request, Response, NextFunction } from 'express';
 
 export const getAll = catchAsync(

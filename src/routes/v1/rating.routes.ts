@@ -4,7 +4,7 @@ import {
     v1AuthRatingControllers,
     v1DinerControllers,
     v1RatingControllers,
-} from '../../controllers';
+} from '@/controllers';
 const router = express.Router();
 
 router.get('/', v1RatingControllers.getAll);

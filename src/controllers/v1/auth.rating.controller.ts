@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import Order from '../../models/order.model';
-import AppError from '../..//utils/common/error/AppError';
-import catchAsync from '../../utils/common/error/catchAsync';
+import Order from '@/models/order.model';
+import AppError from '@/utils/common/error/AppError';
+import catchAsync from '@/utils/common/error/catchAsync';
 import jwt, { TokenExpiredError } from 'jsonwebtoken';
-import diner, { IDiner } from '../../models/diner.model';
-import Rating from '../../models/rating.model';
+import diner, { IDiner } from '@/models/diner.model';
+import Rating from '@/models/rating.model';
 
 export const verifyRating = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {

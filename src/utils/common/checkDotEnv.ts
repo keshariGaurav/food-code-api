@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { logger } from '../../utils/logger/logger';
+import { logger } from '@/utils/logger/logger';
 
 export function dotenvExists(file: string): boolean {
     if (!fs.existsSync(file)) {

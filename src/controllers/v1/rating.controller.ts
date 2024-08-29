@@ -1,8 +1,9 @@
-import Rating from '../../models/rating.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
-import { IDiner } from '../../models/diner.model';
+
+import Rating from '@/models/rating.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import AppError from '@/utils/common/error/AppError';
+import { IDiner } from '@/models/diner.model';
 
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {

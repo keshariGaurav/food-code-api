@@ -1,7 +1,7 @@
 import express from 'express';
 import passport from 'passport';
-import { v1DinerControllers } from '../../controllers/index';
-import { v1AuthDinerControllers } from '../../controllers/index';
+import { v1DinerControllers } from '@/controllers/index';
+import { v1AuthDinerControllers } from '@/controllers/index';
 
 const router = express.Router();
 

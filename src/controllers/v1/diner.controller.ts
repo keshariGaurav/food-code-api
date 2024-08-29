@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import diner from '../../models/diner.model';
-import { IDiner } from '../../models/diner.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import AppError from '../..//utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
+
+import diner from '@/models/diner.model';
+import { IDiner } from '@/models/diner.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import AppError from '@/utils/common/error/AppError';
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const diners = await diner.find({});

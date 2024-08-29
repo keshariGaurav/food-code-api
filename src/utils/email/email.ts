@@ -1,6 +1,6 @@
 import nodemailer, { Transporter } from 'nodemailer';
-import EmailTemplate from './emailTemplate';
-import { templates } from './templates';
+import EmailTemplate from '@/utils/email/emailTemplate';
+import { templates } from '@/utils/email/templates';
 
 interface EmailOptions {
     to: string;

@@ -1,5 +1,5 @@
 import { Document, ObjectId, Schema, model } from 'mongoose';
-import Category from './category.model';
+import Category from '@/models/category.model';
 
 export interface IAddOnItem extends Document {
     name: string;

@@ -1,8 +1,9 @@
-import CafeProfile from '../../models/cafeProfile.model';
-import catchAsync from '../../utils/common/error/catchAsync';
-import AppError from '../../utils/common/error/AppError';
 import { Request, Response, NextFunction } from 'express';
-import { generateQR } from '../../utils/qr/qr';
+
+import CafeProfile from '@/models/cafeProfile.model';
+import catchAsync from '@/utils/common/error/catchAsync';
+import AppError from '@/utils/common/error/AppError';
+import { generateQR } from '@/utils/qr/qr';
 
 export const getOne = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {

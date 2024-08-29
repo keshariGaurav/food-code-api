@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import redisClient from '../../config/redisClient';
+import redisClient from '@/config/redisClient';
 
 const generateCacheKey = (req: Request): string => {
     const { method, originalUrl, query, params } = req;

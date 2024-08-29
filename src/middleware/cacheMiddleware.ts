@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import redisClient from './../config/redisClient';
+import redisClient from '@/config/redisClient';
 import {
     generateCacheKey,
     invalidateCache,
     tagCacheEntry,
-} from './../utils/cache/cacheUtils';
+} from '@/utils/cache/cacheUtils';
 
 interface CustomResponse extends Response {
     sendResponse?: (body: any) => Response;
