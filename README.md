@@ -56,6 +56,12 @@ Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a Q
     - **Helmet**: Provides **basic security protections** by setting **HTTP headers** appropriately.
     - **MongoDB Sanitize**: Prevents **NoSQL injection attacks** by **sanitizing inputs** and ensuring **database security**.
 
+# ER Diagram
+
+![image](https://github.com/user-attachments/assets/f190ecc4-8414-4f45-a27c-15a48dd6f943)
+
+
+
 
 
 
