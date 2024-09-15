@@ -21,4 +21,5 @@ router.get(
 );
 router.post('/login', v1AuthDinerControllers.sendLoginOtp);
 router.post('/verify-login', v1AuthDinerControllers.login);
+router.post('/logout', v1AuthDinerControllers.logout);
 export { router };

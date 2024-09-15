@@ -7,10 +7,7 @@ import multer from 'multer';
 const upload = multer();
 
 const router = express.Router();
-router.get(
-    '/category',
-    v1MenuItemControllers.getAllByCategory
-);
+router.get('/category', v1MenuItemControllers.getAllByCategory);
 router.get(
     '/top-ordered-items',
     v1AuthCafeControllers.protect,

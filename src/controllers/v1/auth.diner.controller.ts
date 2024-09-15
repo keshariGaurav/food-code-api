@@ -210,3 +210,10 @@ export const protect = catchAsync(
         }
     }
 );
+
+export const logout = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        res.clearCookie('jwt');
+        res.status(200).json({ message: 'Logout successful, token cleared' });
+    }
+);
