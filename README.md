@@ -60,8 +60,8 @@ Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a Q
 
 
 
-## Screenshots
-  ### For Restro APP
+# Screenshots
+  ## For Restro APP
   #### Login
   ![image](https://github.com/user-attachments/assets/256f6767-5542-4a9a-a8ad-b55f62522173)
   #### Menu Creation
@@ -70,6 +70,24 @@ Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a Q
   ![image](https://github.com/user-attachments/assets/13d52d33-c2ec-4ca0-b56b-b65a98ddcbdd)
   #### All Menus
   ![image](https://github.com/user-attachments/assets/750cee18-0d39-419b-8f4a-e739dc4fa986)
+
+  ## For Client APP
+
+  ### Menu Page
+  ![image](https://github.com/user-attachments/assets/06c591ac-0f52-4ac4-8d2a-ccbf7d1fae22)
+
+  ### Customize Menu Item
+  ![image](https://github.com/user-attachments/assets/7d72e78f-cdf3-496d-a523-abe6a0931524)
+
+  ### Cart Page
+  ![image](https://github.com/user-attachments/assets/22cb56ea-f503-4cd9-a145-658e9377821f)
+
+  ### Payment Page
+  ![image](https://github.com/user-attachments/assets/b464a2d8-3c40-4fc9-b0fc-ebc324bd023f)
+
+
+
+
 
 
 
