@@ -3,7 +3,26 @@
 Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a QR code placed on their table, view the cafe's menu, and place an order directly from their phone. The application is built using React.js for the front end and Express.js for the API.
 
 ## Tech Stack: 
-**[Javascript][Typescript][Node.js][ReactJS][ExpressJS][BullMQ][RajorPay][Redux][ContextAPI][JWT][Tailwind][MaterialUI][SocketIO][Passport][Redis][MongoDB][Mongoose][QRCode]**.
+
+![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=black&style=flat)
+![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?logo=typescript&logoColor=white&style=flat)
+![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=flat)
+![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=white&style=flat)
+![Express.js](https://img.shields.io/badge/-Express.js-000000?logo=express&logoColor=white&style=flat)
+![BullMQ](https://img.shields.io/badge/-BullMQ-E02424?logo=redis&logoColor=white&style=flat)
+![RazorPay](https://img.shields.io/badge/-RazorPay-1C1E5B?logo=razorpay&logoColor=white&style=flat)
+![Redux](https://img.shields.io/badge/-Redux-764ABC?logo=redux&logoColor=white&style=flat)
+![Context API](https://img.shields.io/badge/-ContextAPI-61DAFB?logo=react&logoColor=white&style=flat)
+![JWT](https://img.shields.io/badge/-JWT-000000?logo=jsonwebtokens&logoColor=white&style=flat)
+![TailwindCSS](https://img.shields.io/badge/-TailwindCSS-38B2AC?logo=tailwindcss&logoColor=white&style=flat)
+![MaterialUI](https://img.shields.io/badge/-MaterialUI-0081CB?logo=material-ui&logoColor=white&style=flat)
+![Socket.IO](https://img.shields.io/badge/-Socket.IO-010101?logo=socket.io&logoColor=white&style=flat)
+![Passport](https://img.shields.io/badge/-Passport-34E27A?logo=passport&logoColor=white&style=flat)
+![Redis](https://img.shields.io/badge/-Redis-D82C20?logo=redis&logoColor=white&style=flat)
+![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?logo=mongodb&logoColor=white&style=flat)
+![Mongoose](https://img.shields.io/badge/-Mongoose-880000?logo=mongoose&logoColor=white&style=flat)
+![QRCode](https://img.shields.io/badge/-QRCode-000000?logo=qrcode&logoColor=white&style=flat)
+
 
 ## Frontend Repos
   ### Client APP
@@ -14,13 +33,20 @@ Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a Q
   -- (https://github.com/keshariGaurav/food-code-api)
 
 ## Features
-QR Code Scanning: Each table has a unique QR code, allowing customers to quickly access the menu for their specific table.
-Order Placement: Customers can place orders directly from their mobile devices, ensuring a seamless ordering experience.
-Real-Time Order Updates: Leveraging Socket.IO, cafe receive real-time updates on their order status, enhancing the overall experience.
-Asynchronous Email Service: Eazy Eats decouples email notifications from the main request-response cycle by using BullMQ for queue management. This ensures that email services run independently without affecting the app's performance.
-MongoDB Change Streams: The backend tracks order generation in real time using MongoDB Watch, enabling live updates on order status.
-Atomic Design & Reusable Components: The frontend is structured using atomic design principles, with a theme file and variant system to ensure that UI components are highly reusable and easy to maintain.
-Scalable Architecture: The system is designed to scale, handling everything from order management to customer notifications in an optimized manner.
+  - QR Code Scanning: Each table has a unique QR code, allowing customers to quickly access the menu for their specific table.
+  - Order Placement: Customers can place orders directly from their mobile devices, ensuring a seamless ordering experience.
+  - Real-Time Order Updates: Leveraging Socket.IO, cafe receive real-time updates on their order status, enhancing the overall experience.
+  - Asynchronous Email Service: Eazy Eats decouples email notifications from the main request-response cycle by using BullMQ for queue management. This ensures that email services run independently without affecting the app's performance.
+  - MongoDB Change Streams: The backend tracks order generation in real time using MongoDB Watch, enabling live updates on order status.
+  - Atomic Design & Reusable Components: The frontend is structured using atomic design principles, with a theme file and variant system to ensure that UI components are highly reusable and easy to maintain.
+  - Scalable Architecture: The system is designed to scale, handling everything from order management to customer notifications in an optimized manner.
+  - Authentication & Authorization:
+    - JWT Authentication: User sessions are securely managed using JWT tokens for stateless authentication.
+    - OAuth with Google: Users can log in using their Google accounts through OAuth integration, providing a seamless and secure login process.
+  - Security:
+    - Rate Limiting: Protects the application from brute force attacks by limiting the number of requests a user can make within a certain timeframe.
+    - Helmet: Provides basic security protections by setting HTTP headers appropriately.
+    - MongoDB Sanitize: Prevents NoSQL injection attacks by sanitizing inputs and ensuring database security.
 
 ## Screenshots
   ### For Restro APP
