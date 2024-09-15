@@ -27,26 +27,38 @@ Eazy Eats is a digital menu and ordering system for cafe. Customers can scan a Q
 ## Frontend Repos
   ### Client APP
   -- (https://github.com/keshariGaurav/food-code-client-app)
-  ### Restro APP
+  ### Cafe APP
   -- (https://github.com/keshariGaurav/food-code-frontend)
   ### Backend API
   -- (https://github.com/keshariGaurav/food-code-api)
 
 ## Features
-  - QR Code Scanning: Each table has a unique QR code, allowing customers to quickly access the menu for their specific table.
-  - Order Placement: Customers can place orders directly from their mobile devices, ensuring a seamless ordering experience.
-  - Real-Time Order Updates: Leveraging Socket.IO, cafe receive real-time updates on their order status, enhancing the overall experience.
-  - Asynchronous Email Service: Eazy Eats decouples email notifications from the main request-response cycle by using BullMQ for queue management. This ensures that email services run independently without affecting the app's performance.
-  - MongoDB Change Streams: The backend tracks order generation in real time using MongoDB Watch, enabling live updates on order status.
-  - Atomic Design & Reusable Components: The frontend is structured using atomic design principles, with a theme file and variant system to ensure that UI components are highly reusable and easy to maintain.
-  - Scalable Architecture: The system is designed to scale, handling everything from order management to customer notifications in an optimized manner.
-  - Authentication & Authorization:
-    - JWT Authentication: User sessions are securely managed using JWT tokens for stateless authentication.
-    - OAuth with Google: Users can log in using their Google accounts through OAuth integration, providing a seamless and secure login process.
-  - Security:
-    - Rate Limiting: Protects the application from brute force attacks by limiting the number of requests a user can make within a certain timeframe.
-    - Helmet: Provides basic security protections by setting HTTP headers appropriately.
-    - MongoDB Sanitize: Prevents NoSQL injection attacks by sanitizing inputs and ensuring database security.
+
+  - **QR Code Scanning**: Each table has a unique **QR code**, allowing customers to quickly access the **menu** for their specific table.
+  - **Order Placement**: Customers can place **orders** directly from their mobile devices, ensuring a **seamless ordering experience**.
+  - **Real-Time Order Updates**: Leveraging **Socket.IO**, cafes receive **real-time updates** on their order status, enhancing the overall experience.
+  - **Asynchronous Email Service**: Eazy Eats decouples **email notifications** from the main request-response cycle by using **BullMQ** for **queue management**. This ensures that **email services** run independently without affecting the app's performance.
+  - **MongoDB Change Streams**: The backend tracks **order generation** in **real time** using **MongoDB Watch**, enabling **live updates** on order status.
+  - **Atomic Design & Reusable Components**: The frontend is structured using **atomic design principles**, with a **theme file and variant system** to ensure that **UI components** are highly **reusable** and easy to maintain.
+  - **State Management with Redux**: **Redux** is used to maintain **application state** on the frontend, ensuring a consistent and predictable state flow across the app.
+  - **Caching with Redux Toolkit Query**: **Redux Toolkit Query** is used to manage **cache** on the frontend, improving **performance** by reducing redundant data fetching.
+  - **Infinite Scroll Implementation**: The app uses **react-infinite-scroll-component** and **react-intersection-observer** to implement **infinite scroll**, ensuring that only the **component list** within the view is loaded, optimizing **performance** and **resource usage**.
+  - **Scalable Architecture with MVC**: Proper use of **middleware** has been implemented to follow the **MVC pattern**, making the code **scalable**, **modifiable**, and **easily extendable**.
+  - **Data Validation**: Validation is enforced within the **model**, ensuring only the **correct type of data** is saved to maintain data integrity.
+  - **Caching with Redis**: **Redis** is used for **caching** to reduce the **load on the database** and improve overall system performance.
+  - **Template-Based Email Service**: The **email service** is built using a **template-based system**, making email sending **extendable** and **easily configurable** for future use cases.
+  - **Payment Gateway Integration**: The app uses **Razorpay** for a seamless **payment gateway** integration, allowing users to make secure transactions.
+  - **Authentication & Authorization**:
+    - **JWT Authentication**: **User sessions** are securely managed using **JWT tokens** for **stateless authentication**.
+    - **OAuth with Google**: Users can log in using their **Google accounts** through **OAuth integration**, providing a seamless and secure **login process**.
+  - **Security**:
+    - **Rate Limiting**: Protects the application from **brute force attacks** by limiting the number of **requests** a user can make within a certain timeframe.
+    - **Helmet**: Provides **basic security protections** by setting **HTTP headers** appropriately.
+    - **MongoDB Sanitize**: Prevents **NoSQL injection attacks** by **sanitizing inputs** and ensuring **database security**.
+
+
+
+
 
 ## Screenshots
   ### For Restro APP
