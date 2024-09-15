@@ -12,7 +12,7 @@ export interface IAddOnItem extends Document {
         {
             name: string;
             price: number;
-            _id:ObjectId;
+            _id: ObjectId;
         }
     ];
 }

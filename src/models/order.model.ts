@@ -24,9 +24,8 @@ interface IOrder extends Document {
     totalAmount: number;
     orderNumber: number;
     cookingRequest: string;
-    razorpayOrderId : string;
+    razorpayOrderId: string;
     razorpayPaymentId: string;
-
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -73,7 +72,7 @@ const OrderSchema = new Schema<IOrder>({
     },
     menuItems: [OrderItemSchema],
     totalAmount: { type: Number, required: true },
-    tableNumber: { type: Number, required: true , default: 1},
+    tableNumber: { type: Number, required: true, default: 1 },
 
     status: {
         type: String,
@@ -86,13 +85,9 @@ const OrderSchema = new Schema<IOrder>({
     },
     orderNumber: { type: Number },
 
-    cookingRequest: {type: String , default: ""},
+    cookingRequest: { type: String, default: '' },
     razorpayOrderId: { type: String },
-    razorpayPaymentId : {type : String}
-
-    
-
-
+    razorpayPaymentId: { type: String },
 });
 
 OrderSchema.pre<IOrder>('save', async function (next) {

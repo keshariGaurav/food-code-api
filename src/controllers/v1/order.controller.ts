@@ -252,8 +252,8 @@ export const verifyPayment = catchAsync(
 export const getAllDinerOrder = catchAsync(
     async (req: RequestWithUser, res: Response, next: NextFunction) => {
         const userId = req.user._id;
-        console.log(userId)
-        const result = await Order.find({_id:userId})
+        console.log(userId);
+        const result = await Order.find({ _id: userId })
             .populate({
                 path: 'menuItems.menuItemId',
                 model: 'MenuItem',
