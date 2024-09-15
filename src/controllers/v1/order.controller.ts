@@ -7,8 +7,16 @@ import MenuItem from '@/models/menuItem.model';
 import catchAsync from '@/utils/common/error/catchAsync';
 import AppError from '@/utils/common/error/AppError';
 import { IDiner } from '@/models/diner.model';
+import { use } from 'passport';
 
+interface User {
+    email: string;
+    _id: string;
+}
 
+interface RequestWithUser extends Request {
+    user?: User;
+}
 
 export const getAll = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -237,6 +245,23 @@ export const verifyPayment = catchAsync(
         res.status(200).json({
             status: 'success',
             data: order,
+        });
+    }
+);
+
+export const getAllDinerOrder = catchAsync(
+    async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        const userId = req.user._id;
+        console.log(userId)
+        const result = await Order.find({_id:userId})
+            .populate({
+                path: 'menuItems.menuItemId',
+                model: 'MenuItem',
+            })
+            .populate('dinerId');
+        res.status(201).json({
+            status: 'success',
+            data: result,
         });
     }
 );
